@@ -18,14 +18,14 @@ impl Urls {
 }
 
 impl Args {
-    pub async fn get_html(&self) -> Result<String, Box<dyn std::error::Error>> {
-        let res = reqwest::get(&self.url).await?.text().await?;
+    pub async fn get_html(&self, url: String) -> Result<String, Box<dyn std::error::Error>> {
+        let res = reqwest::get(url).await?.text().await?;
 
         Ok(res)
     }
 
-    pub async fn parse_html(&self) -> Html {
-        let html = self.get_html().await.unwrap();
+    pub async fn parse_html(&self, nested_url: String) -> Html {
+        let html = self.get_html(nested_url).await.unwrap();
         let document = Html::parse_document(html.as_str());
 
         return document;
@@ -39,8 +39,17 @@ impl Args {
         url.starts_with("/")
     }
 
-    pub async fn recursively_get_links_from_website(&self) -> Urls {
-        let document = self.parse_html().await;
+    pub async fn recursively_get_links_from_website(&self, url: Option<String>) -> Urls {
+        let effective_url = match url {
+            Some(k) => k,
+            None => {
+                let cloned_url = &self.url;
+
+                cloned_url.to_string()
+            }
+        };
+
+        let document = self.parse_html(effective_url).await;
 
         let a_tags_selector = self.get_tag_by_name("a");
         let a_tags = document.select(&a_tags_selector);
@@ -61,8 +70,6 @@ impl Args {
                 }
                 urls.push(href)
             }
-
-    
         }
 
         return urls;

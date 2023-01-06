@@ -9,7 +9,7 @@ async fn main() {
     };
 
 
-    let links = args.recursively_get_links_from_website().await;
+    let links = args.recursively_get_links_from_website(None).await;
 
     println!("{:#?}", links)
 }
