@@ -142,40 +142,6 @@ impl Args {
                         }
                     }
                 }
-
-                // let clone_1 = effective_href.clone();
-                // let clone_2 = effective_href.clone();
-                // if !map.contains_key(&effective_href) {
-                //     {
-                //         let current_tags = self.filter_a_tags(clone_1);
-                //         for href in current_tags {
-
-                //             // let eff = {
-
-                // 			// 	{
-                // 			// 		if self.is_relative_url(&href) {
-
-                // 			// 		}
-                // 			// 	}
-                //             //     // let current = if self.is_relative_url(&href) {
-                //             //     //     let fixed =
-                //             //     //         self.remove_trailing_slashes(self.get_effective_href(href));
-
-                //             //     //     fixed
-                //             //     // } else {
-                //             //     //     let fixed = self.remove_trailing_slashes(href);
-                //             //     //     fixed
-                //             //     // };
-
-                //             //     current
-                //             // };
-
-                //             map.insert(eff, 1);
-                //         }
-                //     }
-                //     urls.push(effective_href);
-                //     map.insert(clone_2, 1);
-                // }
             } else {
                 let cloned = href.clone();
                 if !map.contains_key(&href) {
