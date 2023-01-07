@@ -1,5 +1,5 @@
 use scraper::{Html, Selector};
-use std::collections::HashMap;
+use std::collections::hash_set::HashSet;
 use url::Url;
 
 #[allow(dead_code)]
@@ -93,7 +93,7 @@ impl Args {
     pub fn recursively_get_links_from_website(
         &self,
         url: Option<String>,
-        map: &mut HashMap<String, i32>,
+        set: &mut HashSet<String>,
     ) -> Urls {
         let effective_url = match url {
             Some(k) => k,
@@ -108,48 +108,26 @@ impl Args {
 
         let mut urls = Urls { urls: vec![] };
 
-        for href in a_tags {
-            if self.is_relative_url(&href) {
-                let effective_href = self.get_effective_href(href);
+       for href in a_tags {
 
-                let cl1 = effective_href.clone();
-                let cl2 = effective_href.clone();
+		if self.is_relative_url(&href) {
+			
+			let parent_url = self.remove_trailing_slashes(self.get_effective_href(href));
 
-                if !map.contains_key(&effective_href) {
-                    let current_tags = self.filter_a_tags(cl1);
+			let nested_a_tags = self.filter_a_tags(parent_url);
 
-                    for link in current_tags {
-                        if self.is_relative_url(&link) {
-                            let fixed_link =
-                                self.remove_trailing_slashes(self.get_effective_href(link));
-                            let nested_urls =
-                                self.recursively_get_links_from_website(Some(fixed_link), map);
+			println!("{:#?}", nested_a_tags);
+		} else {
+			let cl = href.clone();
+			let fixed = self.remove_trailing_slashes(cl);
 
-                            for url in nested_urls.urls {
-                                if !map.contains_key(&url) {
-                                    let cl = url.clone();
-                                    urls.push(url);
-                                    map.insert(cl, 1);
-                                }
-                            }
-                        } else {
-							let fixed = self.remove_trailing_slashes(link);
-                            if !map.contains_key(&fixed) {
-								let cl = fixed.clone();
-                                urls.push(fixed);
-								map.insert(cl, 1);
-                            }
-                        }
-                    }
-                }
-            } else {
-                let cloned = href.clone();
-                if !map.contains_key(&href) {
-                    urls.push(cloned);
-                    map.insert(href, 1);
-                }
-            }
-        }
+			let cl_fixed = fixed.clone(); 
+
+			urls.push(fixed);
+			set.insert(cl_fixed);
+		}
+		
+	   }
 
         return urls;
     }

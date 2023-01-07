@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::collections::HashSet;
 
 mod walker;
 
@@ -7,9 +7,9 @@ fn main() {
         url: "https://ynb.sh".to_string(),
     };
 
-    let mut hashmap: HashMap<String, i32> = HashMap::new();
-    let links = args.recursively_get_links_from_website(None, &mut hashmap);
+    let mut set: HashSet<String> = HashSet::new();
+    let links = args.recursively_get_links_from_website(None, &mut set);
 
-    println!("{:#?} {:#?}", links, hashmap)
+    println!("{:#?} {:#?}", links, set)
     
 }
