@@ -15,7 +15,9 @@ pub struct Urls {
 
 impl Urls {
     fn push(&mut self, value: String) {
-        self.urls.push(value)
+        if value != "" {
+            self.urls.push(value)
+        }
     }
 }
 
@@ -111,7 +113,7 @@ impl Args {
         for href in a_tags {
             if self.is_relative_url(&href) {
                 let parent_url = self.remove_trailing_slashes(self.get_effective_href(href));
-				// println!("diagnosis: 114 {}", parent_url);
+                // println!("diagnosis: 114 {}", parent_url);
                 let nested_a_tags = self
                     .filter_a_tags(parent_url)
                     .into_iter()
@@ -130,15 +132,14 @@ impl Args {
                     .collect::<Vec<String>>();
 
                 for tag in nested_a_tags {
-					// println!("diagnosis: 133 {}", tag);
+                    // println!("diagnosis: 133 {}", tag);
                     let cl = tag.clone();
-					let cl2 = tag.clone();
-                    if tag.starts_with("https://ynb.sh") {
+                    let cl2 = tag.clone();
+                    if tag.starts_with(&self.url) {
                         if !set.contains(&tag) {
-                            
-							let a_tags = self.filter_a_tags(tag);
-							set.insert(cl);
-							println!("filtered for {} tags: {:#?}", cl2,  a_tags)
+                            let a_tags = self.filter_a_tags(tag);
+                            set.insert(cl);
+                            println!("filtered for {} tags: {:#?}", cl2, a_tags)
                         }
                     } else {
                         let cl = tag.clone();

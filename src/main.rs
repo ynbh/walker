@@ -4,7 +4,7 @@ mod walker;
 
 fn main() {
     let args = walker::Args {
-        url: "https://ynb.sh".to_string(),
+        url: "https://deno.com/deploy".to_string(),
     };
 
     let mut set: HashSet<String> = HashSet::new();
