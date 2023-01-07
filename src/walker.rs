@@ -108,26 +108,56 @@ impl Args {
 
         let mut urls = Urls { urls: vec![] };
 
-       for href in a_tags {
+        for href in a_tags {
+            if self.is_relative_url(&href) {
+                let parent_url = self.remove_trailing_slashes(self.get_effective_href(href));
+				// println!("diagnosis: 114 {}", parent_url);
+                let nested_a_tags = self
+                    .filter_a_tags(parent_url)
+                    .into_iter()
+                    .map(|x| {
+                        let curr = if self.is_relative_url(&x) {
+                            self.remove_trailing_slashes(self.get_effective_href(x))
+                        } else {
+                            x
+                        };
+                        if !set.contains(&curr) {
+                            return curr;
+                        } else {
+                            return "".to_string();
+                        }
+                    })
+                    .collect::<Vec<String>>();
 
-		if self.is_relative_url(&href) {
-			
-			let parent_url = self.remove_trailing_slashes(self.get_effective_href(href));
+                for tag in nested_a_tags {
+					// println!("diagnosis: 133 {}", tag);
+                    let cl = tag.clone();
+					let cl2 = tag.clone();
+                    if tag.starts_with("https://ynb.sh") {
+                        if !set.contains(&tag) {
+                            
+							let a_tags = self.filter_a_tags(tag);
+							set.insert(cl);
+							println!("filtered for {} tags: {:#?}", cl2,  a_tags)
+                        }
+                    } else {
+                        let cl = tag.clone();
 
-			let nested_a_tags = self.filter_a_tags(parent_url);
+                        urls.push(tag);
+                        set.insert(cl);
+                    }
+                }
+            } else {
+                let cl = href.clone();
+                let fixed = self.remove_trailing_slashes(cl);
 
-			println!("{:#?}", nested_a_tags);
-		} else {
-			let cl = href.clone();
-			let fixed = self.remove_trailing_slashes(cl);
-
-			let cl_fixed = fixed.clone(); 
-
-			urls.push(fixed);
-			set.insert(cl_fixed);
-		}
-		
-	   }
+                let cl_fixed = fixed.clone();
+                if !set.contains(&fixed) {
+                    urls.push(fixed);
+                    set.insert(cl_fixed);
+                }
+            }
+        }
 
         return urls;
     }
