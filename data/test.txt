@@ -1,0 +1,46 @@
+[
+    "/posts",
+    "https://ynb.sh",
+    "https://github.com/ynbh",
+    "mailto:g@ynb.sh",
+]{
+    "https://ynb.sh",
+}
+https://ynb.sh/posts/free-speech-and-some-concerns
+[
+    "https://ynb.sh",
+    "https://github.com/ynbh",
+    "mailto:g@ynb.sh",
+]{
+    "https://ynb.sh",
+    "https://ynb.sh/posts/free-speech-and-some-concerns",
+}
+https://ynb.sh/posts/black-panther-wakanda-forever-review
+[
+    "https://ynb.sh",
+    "https://github.com/ynbh",
+    "mailto:g@ynb.sh",
+]{
+    "https://ynb.sh",
+    "https://ynb.sh/posts/free-speech-and-some-concerns",
+    "https://ynb.sh/posts/black-panther-wakanda-forever-review",
+}
+https://ynb.sh/posts/preparing-for-and-writing-the-TOEFL
+[
+    "https://en.wikipedia.org/wiki/Test_of_English_as_a_Foreign_Language",
+    "/assets/toefl-reading.png",
+    "/assets/toefl-listening.png",
+    "/assets/toefl-speaking.png",
+    "/assets/toefl-speaking-template.png",
+    "https://www.toeflresources.com/speaking-section/toefl-speaking-templates/",
+    "/assets/toefl-writing.png",
+    "/assets/toefl-writing-template.png",
+    "https://ynb.sh",
+    "https://github.com/ynbh",
+    "mailto:g@ynb.sh",
+]{
+    "https://ynb.sh",
+    "https://ynb.sh/posts/free-speech-and-some-concerns",
+    "https://ynb.sh/posts/black-panther-wakanda-forever-review",
+    "https://ynb.sh/posts/preparing-for-and-writing-the-TOEFL",
+}

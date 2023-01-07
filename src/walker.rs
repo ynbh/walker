@@ -10,13 +10,13 @@ pub struct Args {
 
 #[derive(Debug)]
 pub struct Urls {
-    pub urls: Vec<String>,
+    pub urls: HashSet<String>,
 }
 
 impl Urls {
     fn push(&mut self, value: String) {
         if value != "" {
-            self.urls.push(value)
+            self.urls.insert(value);
         }
     }
 }
@@ -108,12 +108,14 @@ impl Args {
 
         let a_tags = self.filter_a_tags(effective_url);
 
-        let mut urls = Urls { urls: vec![] };
+        let mut urls = Urls {
+            urls: HashSet::new(),
+        };
 
         for href in a_tags {
             if self.is_relative_url(&href) {
                 let parent_url = self.remove_trailing_slashes(self.get_effective_href(href));
-                // println!("diagnosis: 114 {}", parent_url);
+
                 let nested_a_tags = self
                     .filter_a_tags(parent_url)
                     .into_iter()
@@ -135,11 +137,44 @@ impl Args {
                     // println!("diagnosis: 133 {}", tag);
                     let cl = tag.clone();
                     let cl2 = tag.clone();
+                    urls.push(cl2);
                     if tag.starts_with(&self.url) {
                         if !set.contains(&tag) {
                             let a_tags = self.filter_a_tags(tag);
+
                             set.insert(cl);
-                            println!("filtered for {} tags: {:#?}", cl2, a_tags)
+
+                            for href in &a_tags {
+                                if self.is_relative_url(&href) {
+                                    let fixed = self.remove_trailing_slashes(
+                                        self.get_effective_href(href.to_string()),
+                                    );
+                                    let cl = fixed.clone();
+                                    let cl2 = fixed.clone();
+                                    urls.push(cl);
+                                    if !set.contains(&fixed) {
+                                        let recursed_urls = self
+                                            .recursively_get_links_from_website(Some(fixed), set);
+
+                                        for link in recursed_urls.urls {
+                                            let cl = link.clone();
+                                            urls.push(link);
+                                            if !set.contains(&cl) {
+                                                let link_cl = cl.clone();
+
+                                                set.insert(link_cl);
+                                            }
+                                        }
+
+                                        set.insert(cl2);
+                                    }
+                                } else {
+                                    let fixed = self.remove_trailing_slashes((&href).to_string());
+                                    let fixed_cl = fixed.clone();
+                                    urls.push(fixed);
+                                    set.insert(fixed_cl);
+                                }
+                            }
                         }
                     } else {
                         let cl = tag.clone();
@@ -153,9 +188,9 @@ impl Args {
                 let fixed = self.remove_trailing_slashes(cl);
 
                 let cl_fixed = fixed.clone();
+                urls.push(cl_fixed);
                 if !set.contains(&fixed) {
-                    urls.push(fixed);
-                    set.insert(cl_fixed);
+                    set.insert(fixed);
                 }
             }
         }
