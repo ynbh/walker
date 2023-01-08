@@ -23,6 +23,8 @@ impl Urls {
 
 impl Args {
     pub fn get_html(&self, url: String) -> Result<String, Box<dyn std::error::Error>> {
+
+        println!("Fetching {}", url);
         let res = reqwest::blocking::get(url)?.text()?;
 
         Ok(res)
