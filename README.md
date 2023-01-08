@@ -40,4 +40,4 @@ https://ynb.sh/assets/toefl-writing-template.png: ✅
 https://ynb.sh/posts/free-speech-and-some-concerns: ✅
 https://www.toeflresources.com/speaking-section/toefl-speaking-templates: ✅
 ```
-
+In situations where `walker` is unable to resolve some arbitrary URL, it will terminate streaming the boolean-y response to the terminal and `panic`. I intend to make this process a tad bit more graceful by storing those URLs in a distinct vector and displaying them at a later time so that the entire process is not disrupted.
