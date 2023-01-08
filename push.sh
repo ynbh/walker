@@ -1,1 +1,1 @@
-commit -r && gth --input "README.md" --output "index.html" -w -b
+gth --input "README.md" --output "index.html" -w -b && commit -r
