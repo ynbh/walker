@@ -9,11 +9,11 @@ pub struct Args {
 }
 
 #[derive(Debug)]
-pub struct Urls {
+pub struct URLs {
     pub urls: HashSet<String>,
 }
 
-impl Urls {
+impl URLs {
     fn push(&mut self, value: String) {
         if value != "" {
             self.urls.insert(self.remove_trailing_slashes(value));
@@ -128,7 +128,7 @@ impl Args {
         &self,
         url: Option<String>,
         set: &mut HashSet<String>,
-    ) -> Urls {
+    ) -> URLs {
         let effective_url = match url {
             Some(k) => k,
             None => {
@@ -140,7 +140,7 @@ impl Args {
 
         let a_tags = self.filter_a_tags(effective_url);
 
-        let mut urls = Urls {
+        let mut urls = URLs {
             urls: HashSet::new(),
         };
 
