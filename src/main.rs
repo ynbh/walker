@@ -2,11 +2,25 @@ use std::collections::HashSet;
 use std::fs::write;
 use std::path::PathBuf;
 
+use clap::Parser;
+
 mod walker;
 
+/// Tool to recursively analyze links from a website.
+#[derive(Parser, Debug)]
+#[command(author, version, about, long_about = None)]
+struct CLIArgs {
+
+    /// URL of the website to analyze links from.
+    #[arg(short, long)]
+    url: String,
+}
 fn main() {
+
+    let url = CLIArgs::parse().url;
+
     let args = walker::Args {
-        url: "https://ynb.sh".to_string(),
+        url
     };
 
     let mut set: HashSet<String> = HashSet::new();
