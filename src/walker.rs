@@ -29,18 +29,24 @@ impl URLs {
 }
 
 impl Args {
-    pub fn get(&self, url: String) -> reqwest::blocking::Response {
-        reqwest::blocking::get(url).unwrap()
+    pub fn get(&self, url: String) -> Result<reqwest::blocking::Response, String> {
+        match reqwest::blocking::get(url) {
+            Ok(n) => Ok(n),
+            Err(e) => Err(format!("ERROR: cannot fetch URL: {}", e)),
+        }
     }
 
     pub fn is_broken(&self, url: String) -> String {
-        let status = self.get(url).status().to_string();
+        let status = match self.get(url) {
+            Ok(n) => n.status().to_string(),
+            Err(_) => "URL Error".to_string()
+        };
 
         status
     }
 
     pub fn get_html(&self, url: String) -> Result<String, Box<dyn std::error::Error>> {
-        let res = self.get(url).text()?;
+        let res = self.get(url).unwrap().text()?;
 
         Ok(res)
     }
@@ -110,6 +116,7 @@ impl Args {
     }
     pub fn get_effective_href(&self, href: String) -> String {
         let parsed = Url::parse(&self.url).unwrap();
+
         let base_url = match self.base_url(parsed) {
             Ok(n) => n.to_string(),
             Err(e) => format!("An error occurred: {}", e),

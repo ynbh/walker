@@ -10,18 +10,14 @@ mod walker;
 #[derive(Parser, Debug)]
 #[command(author, version, about, long_about = None)]
 struct CLIArgs {
-
     /// URL of the website to analyze links from.
     #[arg(short, long)]
     url: String,
 }
 fn main() {
-
     let url = CLIArgs::parse().url;
 
-    let args = walker::Args {
-        url
-    };
+    let args = walker::Args { url };
 
     let mut set: HashSet<String> = HashSet::new();
     println!("Running...");
@@ -32,14 +28,15 @@ fn main() {
     } else {
         for link in &links.urls {
             if !link.starts_with("mailto") {
-                let is_valid = args.is_broken(link.to_string()) == "200 OK";
+                let status = args.is_broken(link.to_string());
 
                 println!(
                     "{}: {}",
                     link,
-                    match is_valid {
-                        true => "✅",
-                        false => "❌",
+                    match status.as_str() {
+                        "200 OK" => "✅".to_string(),
+                        "URL Error" => "CANNOT RESOLVE ❌".to_string() ,
+                        _ => "❌".to_string(),
                     }
                 )
             }
