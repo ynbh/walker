@@ -1,3 +1,4 @@
+use reqwest::StatusCode;
 use scraper::{Html, Selector};
 use std::collections::hash_set::HashSet;
 use url::Url;
@@ -13,6 +14,7 @@ pub struct Urls {
     pub urls: HashSet<String>,
 }
 
+
 impl Urls {
     fn push(&mut self, value: String) {
         if value != "" {
@@ -22,10 +24,19 @@ impl Urls {
 }
 
 impl Args {
-    pub fn get_html(&self, url: String) -> Result<String, Box<dyn std::error::Error>> {
+    pub fn get(&self, url: String) -> reqwest::blocking::Response {
+        reqwest::blocking::get(url).unwrap()
+    }
 
-        println!("Fetching {}", url);
-        let res = reqwest::blocking::get(url)?.text()?;
+    pub fn is_broken(&self, url: String) -> String {
+        let status = self.get(url).status().to_string();
+
+        status
+    }
+
+    pub fn get_html(&self, url: String) -> Result<String, Box<dyn std::error::Error>> {
+        println!("FETCHING: {}", url);
+        let res = self.get(url).text()?;
 
         Ok(res)
     }
@@ -92,6 +103,18 @@ impl Args {
             url = url.trim_end_matches('/').to_string();
         }
         url
+    }
+    pub fn get_effective_href(&self, href: String) -> String {
+        let parsed = Url::parse(&self.url).unwrap();
+        let base_url = self.base_url(parsed).unwrap().to_string();
+
+        let relative_split = href.split("https://ynb.sh").collect::<Vec<&str>>()[0];
+
+        format!(
+            "{}{}",
+            self.remove_trailing_slashes(base_url),
+            relative_split
+        )
     }
 
     pub fn recursively_get_links_from_website(
@@ -198,18 +221,5 @@ impl Args {
         }
 
         return urls;
-    }
-
-    pub fn get_effective_href(&self, href: String) -> String {
-        let parsed = Url::parse(&self.url).unwrap();
-        let base_url = self.base_url(parsed).unwrap().to_string();
-
-        let relative_split = href.split("https://ynb.sh").collect::<Vec<&str>>()[0];
-
-        format!(
-            "{}{}",
-            self.remove_trailing_slashes(base_url),
-            relative_split
-        )
     }
 }

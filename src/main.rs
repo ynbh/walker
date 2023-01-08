@@ -6,7 +6,7 @@ mod walker;
 
 fn main() {
     let args = walker::Args {
-        url: "https://styfle.dev/".to_string(),
+        url: "https://ynb.sh".to_string(),
     };
 
     let mut set: HashSet<String> = HashSet::new();
@@ -16,7 +16,20 @@ fn main() {
     if links.urls.len() == 0 {
         eprintln!("It looks like the site is probably client-side rendered. In this case, something like puppeteer would be needed.")
     } else {
-        println!("All URLs: {:#?}", links);
+        for link in &links.urls {
+            if !link.starts_with("mailto") {
+                let is_valid = args.is_broken(link.to_string()) == "200 OK";
+
+                println!(
+                    "{}: {}",
+                    link,
+                    match is_valid {
+                        true => "✅",
+                        false => "❌",
+                    }
+                )
+            }
+        }
         pipe_output(
             links.urls,
             args.remove_trailing_slashes(args.url.to_string()),
