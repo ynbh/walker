@@ -1,4 +1,3 @@
-use reqwest::StatusCode;
 use scraper::{Html, Selector};
 use std::collections::hash_set::HashSet;
 use url::Url;
@@ -14,12 +13,18 @@ pub struct Urls {
     pub urls: HashSet<String>,
 }
 
-
 impl Urls {
     fn push(&mut self, value: String) {
         if value != "" {
-            self.urls.insert(value);
+            self.urls.insert(self.remove_trailing_slashes(value));
         }
+    }
+
+    fn remove_trailing_slashes(&self, mut url: String) -> String {
+        while url.ends_with('/') {
+            url = url.trim_end_matches('/').to_string();
+        }
+        url
     }
 }
 
@@ -35,7 +40,6 @@ impl Args {
     }
 
     pub fn get_html(&self, url: String) -> Result<String, Box<dyn std::error::Error>> {
-        println!("FETCHING: {}", url);
         let res = self.get(url).text()?;
 
         Ok(res)
@@ -106,7 +110,10 @@ impl Args {
     }
     pub fn get_effective_href(&self, href: String) -> String {
         let parsed = Url::parse(&self.url).unwrap();
-        let base_url = self.base_url(parsed).unwrap().to_string();
+        let base_url = match self.base_url(parsed) {
+            Ok(n) => n.to_string(),
+            Err(e) => format!("An error occurred: {}", e),
+        };
 
         let relative_split = href.split("https://ynb.sh").collect::<Vec<&str>>()[0];
 

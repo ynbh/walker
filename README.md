@@ -8,6 +8,8 @@ It is worth noting that this process may take an indeterminate amount of time, a
 
 Since the implementation of this tool works through fetching the HTML of the website in question, it would be impossible to detect, or perhaps even retrieve the initial HTML, for websites that render on the client. Therefore, `walker` only works for static and server-rendered sites. It should be noted that when I mention server-rendered, I mean websites that fetch all HTML in their initial request to the server, and not just selective data like `meta` tags for bots to crawl.
 
+Also, `walker` panics on for URLs it cannot resolve invalid URLs.
+
 ## Examples
 
-Examples of what the data would look like after the process is over can be found in the [data](/data/) directory. All links in it are unique. However, the data simply only shows what links are _available_ on the website, and not if they are valid or not. Implementing that feature isn't hard, since we only need to check for `200 OK` responses, like I initially said in the introduction.
+Examples of what the data would look like after the process is over can be found in the [data](/data/) directory. All links in it are unique. However, the data simply only shows what links are _available_ on the website, and not if they are valid or not. 
