@@ -48,8 +48,13 @@ fn main() {
     if links.urls.len() == 0 {
         eprintln!("It looks like the site is probably client-side rendered. In this case, something like puppeteer would be needed.")
     } else {
+        let cl = links.urls.clone();
+
         let now = Instant::now();
         println!("Received {} links. Iterating now...", links.urls.len());
+
+        store_output(cl, args.remove_trailing_slashes(args.url.to_string())).unwrap();
+
         let mut response = String::new();
         for link in &links.urls {
             if !link.starts_with("mailto") {
@@ -101,16 +106,10 @@ fn main() {
                 ),
             };
         }
-
-        pipe_output(
-            links.urls,
-            args.remove_trailing_slashes(args.url.to_string()),
-        )
-        .unwrap();
     }
 }
 
-fn pipe_output(set: HashSet<String>, url: String) -> std::io::Result<String> {
+fn store_output(set: HashSet<String>, url: String) -> std::io::Result<String> {
     let links = serde_json::to_string(&set)?;
     let save_path = format!("{}.json", url);
 
