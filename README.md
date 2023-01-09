@@ -8,9 +8,9 @@ It is worth noting that this process may take an indeterminate amount of time, a
 
 Since the implementation of this tool works through fetching the HTML of the website in question, it would be impossible to detect, or perhaps even retrieve the initial HTML, for websites that render on the client. Therefore, `walker` only works for static and server-rendered sites. It should be noted that when I mention server-rendered, I mean websites that fetch all HTML in their initial request to the server, and not just selective data like `meta` tags for bots to crawl.
 
-There could be cases where some parts of the website are server-rendered, while some of them are client-side rendered. In these cases, `walker` is able to successfully resolve the URLs it can find on the server-side rendered HTML.
+There could be cases where some parts of the website are server-rendered, while some of them are client-side rendered. In these cases, `walker` will only parse and verify links it can find on the server-side rendered HTML.
 
-I could perhaps use something like headless chrome to look get the HTML for these pages, but that only adds overhead to problem I was initially trying to solve. I am not keen on making headless chrome work in Rust. That task sounds like a better job for TypeScript.
+I could perhaps use something like headless chrome to get the HTML for these pages, but that only adds overhead to problem I was initially trying to solve. I am not keen on making headless chrome work in Rust. That task sounds like a better job for TypeScript.
 
 ## Examples
 
