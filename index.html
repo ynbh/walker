@@ -238,30 +238,51 @@
 <p>It is worth noting that this process may take an indeterminate amount of time, as a website may contain an infinite number of nested links. A potential future update to the recursive function could be the addition of a <code>depth</code> parameter, which would restrict recursion to only a specified number of levels. I don't plan on implementing this any time soon, though!</p>
 <h2>Quirks</h2>
 <p>Since the implementation of this tool works through fetching the HTML of the website in question, it would be impossible to detect, or perhaps even retrieve the initial HTML, for websites that render on the client. Therefore, <code>walker</code> only works for static and server-rendered sites. It should be noted that when I mention server-rendered, I mean websites that fetch all HTML in their initial request to the server, and not just selective data like <code>meta</code> tags for bots to crawl.</p>
-<p>Also, <code>walker</code> panics for invalid URLs since it is unable to meaningfully resolve it.</p>
+<p>There could be cases where some parts of the website are server-rendered, while some of them are client-side rendered. In these cases, <code>walker</code> is able to successfully resolve the URLs it can find on the server-side rendered HTML.</p>
+<p>I could perhaps use something like headless chrome to look get the HTML for these pages, but that only adds overhead to problem I was initially trying to solve. I am not keen on making headless chrome work in Rust. That task sounds like a better job for TypeScript.</p>
 <h2>Examples</h2>
 <p>Examples of what the data would look like after the process is over can be found in the <a href="/data/">data</a> directory. All links in it are unique. However, the data simply only shows what links are <em>available</em> on the website, and not if they are valid or not. To see what links are functional, download the binary and run it with a <code>--url</code> argument.</p>
 <h2>Usage</h2>
-<p>Using <code>walker</code> is easy. It has a dead-simple CLI interface that can be used to visually see the results of the analysis. For example, doing</p>
+<p>Using <code>walker</code> is easy. It has a dead-simple CLI interface that can be used to visually see the results of the analysis. Options for it are:</p>
+<pre><code class="language-bash">Options:
+  -u, --url &#x3C;URL>  URL of the website to analyze links from
+  -r, --relative   Whether to perform a deep search or not
+  -d, --debug      Shows what URL walker is currently on
+  -c, --construct  Constructs the stream of responses into a string and copies it to the clipboard
+  -h, --help       Print help information
+  -V, --version    Print version information
+</code></pre>
+<p>So, for example, doing:</p>
 <pre><code class="language-bash">walker --url "https://ynb.sh"
 </code></pre>
 <p>...would result in:</p>
-<pre><code class="language-bash">https://ynb.sh: ✅
+<pre><code class="language-bash">Received 4 links. Iterating now...
+https://github.com/ynbh: ✅
+https://ynb.sh/posts: ✅
+https://ynb.sh: ✅
+</code></pre>
+<p>But when used with the <code>-r</code> argument, it would result in something like:</p>
+<pre><code class="language-bash">Received 16 links. Iterating now...
+http://zeroclipboard.org: ❌
+https://ynb.sh/assets/toefl-speaking-template.png: ✅
+https://ynb.sh/posts/free-speech-and-some-concerns: ✅
+https://ynb.sh: ✅
+https://ynb.sh/posts: ✅
+https://github.com/ynbh: ✅
+https://en.wikipedia.org/wiki/Test_of_English_as_a_Foreign_Language: ✅
+https://ynb.sh/assets/toefl-speaking.png: ✅
+https://ynb.sh/assets/toefl-writing-template.png: ✅
+https://www.toeflresources.com/speaking-section/toefl-speaking-templates: ✅
 https://ynb.sh/assets/toefl-listening.png: ✅
 https://ynb.sh/assets/toefl-writing.png: ✅
-https://ynb.sh/posts: ✅
-http://zeroclipboard.org: ❌
-https://ynb.sh/assets/toefl-reading.png: ✅
-https://github.com/ynbh: ✅
-https://ynb.sh/posts/preparing-for-and-writing-the-TOEFL: ✅
-https://ynb.sh/assets/toefl-speaking.png: ✅
-https://ynb.sh/assets/toefl-speaking-template.png: ✅
-https://en.wikipedia.org/wiki/Test_of_English_as_a_Foreign_Language: ✅
 https://ynb.sh/posts/black-panther-wakanda-forever-review: ✅
-https://ynb.sh/assets/toefl-writing-template.png: ✅
-https://ynb.sh/posts/free-speech-and-some-concerns: ✅
-https://www.toeflresources.com/speaking-section/toefl-speaking-templates: ✅
+https://ynb.sh/posts/preparing-for-and-writing-the-TOEFL: ✅
+https://ynb.sh/assets/toefl-reading.png: ✅
+Stats
+Time to get all links: 3 seconds
+Time to verify links: 5 seconds
 </code></pre>
+<p>To debug what URL <code>walker</code> is currently fetching, simply pass it a <code>-d</code> debug flag.</p>
 <p>In situations where <code>walker</code> is unable to resolve some arbitrary URL, it will show a message stating <code>CANNOT RESOLVE ❌</code>. The URL is either no longer valid, or there is some kind of block that is making it unable to properly resolve the URL. Either way, it is best to visit the website itself and check if it loads for you.</p>
         </div>
     </body>

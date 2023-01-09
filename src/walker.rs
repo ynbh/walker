@@ -2,10 +2,14 @@ use scraper::{Html, Selector};
 use std::collections::hash_set::HashSet;
 use url::Url;
 
+use colored::*;
+
 #[allow(dead_code)]
 #[derive(Debug)]
 pub struct Args {
     pub url: String,
+    pub search_relative: bool,
+    pub debug: bool
 }
 
 #[derive(Debug)]
@@ -29,7 +33,15 @@ impl URLs {
 }
 
 impl Args {
-    pub fn get(&self, url: String) -> Result<reqwest::blocking::Response, String> {
+    pub fn get(
+        &self,
+        url: String,
+        debug: Option<bool>,
+    ) -> Result<reqwest::blocking::Response, String> {
+        if debug.unwrap_or(false) {
+            println!("{}", format!("[DEBUG] Fetching {url}").bright_purple())
+        }
+
         match reqwest::blocking::get(url) {
             Ok(n) => Ok(n),
             Err(e) => Err(format!("ERROR: cannot fetch URL: {}", e)),
@@ -37,16 +49,16 @@ impl Args {
     }
 
     pub fn is_broken(&self, url: String) -> String {
-        let status = match self.get(url) {
+        let status = match self.get(url, None) {
             Ok(n) => n.status().to_string(),
-            Err(_) => "URL Error".to_string()
+            Err(_) => "URL Error".to_string(),
         };
 
         status
     }
 
     pub fn get_html(&self, url: String) -> Result<String, Box<dyn std::error::Error>> {
-        let res = self.get(url).unwrap().text()?;
+        let res = self.get(url, Some(self.debug)).unwrap().text()?;
 
         Ok(res)
     }
@@ -153,74 +165,84 @@ impl Args {
 
         for href in a_tags {
             if self.is_relative_url(&href) {
+                println!("{}", href);
                 let parent_url = self.remove_trailing_slashes(self.get_effective_href(href));
+                if self.search_relative {
+                    let nested_a_tags = self
+                        .filter_a_tags(parent_url)
+                        .into_iter()
+                        .map(|x| {
+                            let curr = if self.is_relative_url(&x) {
+                                self.remove_trailing_slashes(self.get_effective_href(x))
+                            } else {
+                                x
+                            };
+                            if !set.contains(&curr) {
+                                return curr;
+                            } else {
+                                return "".to_string();
+                            }
+                        })
+                        .collect::<Vec<String>>();
 
-                let nested_a_tags = self
-                    .filter_a_tags(parent_url)
-                    .into_iter()
-                    .map(|x| {
-                        let curr = if self.is_relative_url(&x) {
-                            self.remove_trailing_slashes(self.get_effective_href(x))
-                        } else {
-                            x
-                        };
-                        if !set.contains(&curr) {
-                            return curr;
-                        } else {
-                            return "".to_string();
-                        }
-                    })
-                    .collect::<Vec<String>>();
+                    for tag in nested_a_tags {
+                        // println!("diagnosis: 133 {}", tag);
+                        let cl = tag.clone();
+                        let cl2 = tag.clone();
+                        urls.push(cl2);
+                        if tag.starts_with(&self.url) {
+                            if !set.contains(&tag) {
+                                let a_tags = self.filter_a_tags(tag);
 
-                for tag in nested_a_tags {
-                    // println!("diagnosis: 133 {}", tag);
-                    let cl = tag.clone();
-                    let cl2 = tag.clone();
-                    urls.push(cl2);
-                    if tag.starts_with(&self.url) {
-                        if !set.contains(&tag) {
-                            let a_tags = self.filter_a_tags(tag);
+                                set.insert(cl);
 
-                            set.insert(cl);
+                                for href in &a_tags {
+                                    if self.is_relative_url(&href) {
+                                        let fixed = self.remove_trailing_slashes(
+                                            self.get_effective_href(href.to_string()),
+                                        );
+                                        let cl = fixed.clone();
+                                        let cl2 = fixed.clone();
+                                        urls.push(cl);
+                                        if !set.contains(&fixed) {
+                                            let recursed_urls = self
+                                                .recursively_get_links_from_website(
+                                                    Some(fixed),
+                                                    set,
+                                                );
 
-                            for href in &a_tags {
-                                if self.is_relative_url(&href) {
-                                    let fixed = self.remove_trailing_slashes(
-                                        self.get_effective_href(href.to_string()),
-                                    );
-                                    let cl = fixed.clone();
-                                    let cl2 = fixed.clone();
-                                    urls.push(cl);
-                                    if !set.contains(&fixed) {
-                                        let recursed_urls = self
-                                            .recursively_get_links_from_website(Some(fixed), set);
+                                            for link in recursed_urls.urls {
+                                                let cl = link.clone();
+                                                urls.push(link);
+                                                if !set.contains(&cl) {
+                                                    let link_cl = cl.clone();
 
-                                        for link in recursed_urls.urls {
-                                            let cl = link.clone();
-                                            urls.push(link);
-                                            if !set.contains(&cl) {
-                                                let link_cl = cl.clone();
-
-                                                set.insert(link_cl);
+                                                    set.insert(link_cl);
+                                                }
                                             }
-                                        }
 
-                                        set.insert(cl2);
+                                            set.insert(cl2);
+                                        }
+                                    } else {
+                                        let fixed =
+                                            self.remove_trailing_slashes((&href).to_string());
+                                        let fixed_cl = fixed.clone();
+                                        urls.push(fixed);
+                                        set.insert(fixed_cl);
                                     }
-                                } else {
-                                    let fixed = self.remove_trailing_slashes((&href).to_string());
-                                    let fixed_cl = fixed.clone();
-                                    urls.push(fixed);
-                                    set.insert(fixed_cl);
                                 }
                             }
-                        }
-                    } else {
-                        let cl = tag.clone();
+                        } else {
+                            let cl = tag.clone();
 
-                        urls.push(tag);
-                        set.insert(cl);
+                            urls.push(tag);
+                            set.insert(cl);
+                        }
                     }
+                } else {
+                    let cl = parent_url.clone();
+                    urls.push(parent_url);
+                    set.insert(cl);
                 }
             } else {
                 let cl = href.clone();
