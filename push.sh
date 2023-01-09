@@ -1,1 +1,0 @@
-gth --input "README.md" --output "index.html" -w -b && commit -r
