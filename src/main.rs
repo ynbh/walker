@@ -133,7 +133,7 @@ fn store_output(set: HashSet<String>, url: String) -> std::io::Result<String> {
 
     match create_dir(format!("{working_dir}")) {
         Ok(n) => n,
-        Err(e) => {
+        Err(_e) => {
             println!("Directory already exists. Writing to file now.");
             let cl = working_dir.clone() + &save_path;
             let links_cl = links.clone();
