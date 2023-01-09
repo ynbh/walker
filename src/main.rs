@@ -1,5 +1,6 @@
 use std::collections::HashSet;
-use std::fs::write;
+use std::env;
+use std::fs::{create_dir, write};
 use std::path::PathBuf;
 use std::time::Instant;
 
@@ -30,6 +31,9 @@ struct CLIArgs {
     /// Constructs the stream of responses into a string and copies it to the clipboard.
     #[arg(short, long, default_value_t = false)]
     construct: bool,
+
+    #[arg(short, long, default_value_t = false)]
+    singular: bool,
 }
 fn main() {
     let cli_args = CLIArgs::parse();
@@ -39,6 +43,14 @@ fn main() {
         search_relative: cli_args.relative,
         debug: cli_args.debug,
     };
+    if cli_args.singular {
+        return println!(
+            "{:#?}",
+            args.get(args.url.to_string(), Some(false))
+                .unwrap()
+                .error_for_status()
+        );
+    }
 
     let mut set: HashSet<String> = HashSet::new();
     println!("Running...");
@@ -50,7 +62,6 @@ fn main() {
         eprintln!("It looks like the site is probably client-side rendered. In this case, something like puppeteer would be needed.")
     } else {
         let cl = links.urls.clone();
-
 
         let parsed_url = Url::parse(&args.url).unwrap();
         let base_url = args.get_domain_name(parsed_url);
@@ -115,11 +126,29 @@ fn main() {
 
 fn store_output(set: HashSet<String>, url: String) -> std::io::Result<String> {
     let links = serde_json::to_string(&set)?;
-    let save_path = format!("{}.json", url);
+    let save_path = format!("/{}.json", url);
+
+    let current_dir = get_current_working_dir();
+    let working_dir = current_dir + "/data";
+
+    match create_dir(format!("{working_dir}")) {
+        Ok(n) => n,
+        Err(e) => {
+            println!("Directory already exists. Writing to file now.");
+            let cl = working_dir.clone() + &save_path;
+            let links_cl = links.clone();
+
+            match write(cl.clone() , links_cl) {
+                Ok(n) => n,
+                Err(e) => println!("Some error occurred: {}", e),
+            } 
+            return Ok(format!("Saved to {cl}"));
+        },
+    }
 
     let cl = save_path.clone();
 
-    let readable_file_path = PathBuf::from("data/").join(save_path);
+    let readable_file_path = PathBuf::from(working_dir).join(save_path);
     let rd_cl = readable_file_path.clone();
     match write(readable_file_path, links) {
         Ok(n) => n,
@@ -131,4 +160,12 @@ fn store_output(set: HashSet<String>, url: String) -> std::io::Result<String> {
 
     let success_message = format!("Saved to {}", cl);
     Ok(success_message)
+}
+
+fn get_current_working_dir() -> String {
+    let res = env::current_dir();
+    match res {
+        Ok(path) => path.into_os_string().into_string().unwrap(),
+        Err(_) => "FAILED".to_string(),
+    }
 }

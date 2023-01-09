@@ -9,7 +9,7 @@ use colored::*;
 pub struct Args {
     pub url: String,
     pub search_relative: bool,
-    pub debug: bool
+    pub debug: bool,
 }
 
 #[derive(Debug)]
