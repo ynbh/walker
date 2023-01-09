@@ -5,6 +5,7 @@ use std::time::Instant;
 
 use arboard::Clipboard;
 use colored::*;
+use url::Url;
 
 use clap::Parser;
 
@@ -50,11 +51,14 @@ fn main() {
     } else {
         let cl = links.urls.clone();
 
+
+        let parsed_url = Url::parse(&args.url).unwrap();
+        let base_url = args.get_domain_name(parsed_url);
+
+        store_output(cl, args.remove_trailing_slashes(base_url)).unwrap();
+
         let now = Instant::now();
         println!("Received {} links. Iterating now...", links.urls.len());
-
-        store_output(cl, args.remove_trailing_slashes(args.url.to_string())).unwrap();
-
         let mut response = String::new();
         for link in &links.urls {
             if !link.starts_with("mailto") {
@@ -72,9 +76,9 @@ fn main() {
                 println!("{}: {}", link, msg)
             }
         }
-        let mut clipboard = Clipboard::new().unwrap();
 
         let loop_elapsed = now.elapsed().as_secs().to_string().bright_magenta();
+        let mut clipboard = Clipboard::new().unwrap();
 
         let message = format!(
             "{}\n{}\n{}",
