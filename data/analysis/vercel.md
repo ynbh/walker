@@ -1,7 +1,5 @@
 | URLs    | Status |
 | ----------- | ----------- |
-| Header      | Title       |
-| Paragraph   | Text        |
 | https://vercel.com/templates/next.js/nextjs-portfolio | ✅ |
 | https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fvercel%2Fvercel%2Ftree%2Fmain%2Fexamples%2Fvue&template=vue | ✅ |
 | https://twitter.com/rsms | ✅ |
