@@ -165,7 +165,6 @@ impl Args {
 
         for href in a_tags {
             if self.is_relative_url(&href) {
-                println!("{}", href);
                 let parent_url = self.remove_trailing_slashes(self.get_effective_href(href));
                 if self.search_relative {
                     let nested_a_tags = self

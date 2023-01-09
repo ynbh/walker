@@ -61,7 +61,7 @@ fn main() {
                 };
 
                 if cli_args.construct {
-                    response.push_str(format!("{}\n", msg).as_str());
+                    response.push_str(format!("{}: {}\n", link, msg).as_str());
                 }
 
                 println!("{}: {}", link, msg)
