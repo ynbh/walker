@@ -14,7 +14,7 @@ I could perhaps use something like headless chrome to get the HTML for these pag
 
 ## Examples
 
-Examples of what the data would look like after the process is over can be found in the [data](/data/) directory. All links in it are unique. However, the data simply only shows what links are _available_ on the website, and not if they are valid or not. To see what links are functional, download the binary from [download](/download/walker) and run it with a `--url` argument.
+Examples of what the data would look like after the process is over can be found in the [data](/data/) directory. All links in it are unique. However, the data simply only shows what links are _available_ on the website, and not if they are valid or not. To see what links are functional, download the binary from [download](/download/) and run it with a `--url` argument.
 
 ## Usage
 
