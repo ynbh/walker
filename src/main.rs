@@ -35,27 +35,31 @@ struct CLIArgs {
     #[arg(short, long, default_value_t = false)]
     singular: bool,
 }
-fn main() {
+
+#[tokio::main]
+async fn main() {
     let cli_args = CLIArgs::parse();
 
     let args = walker::Args {
         url: cli_args.url,
         search_relative: cli_args.relative,
         debug: cli_args.debug,
+        client: reqwest::Client::new(),
     };
     if cli_args.singular {
         return println!(
             "{:#?}",
-            args.get(args.url.to_string(), Some(false))
+            args.get(args.url.to_string(), Some(false)).await
                 .unwrap()
-                .error_for_status()
+                .text()
+                .await
         );
     }
 
     let mut set: HashSet<String> = HashSet::new();
     println!("Running...");
     let now = Instant::now();
-    let links = args.recursively_get_links_from_website(None, &mut set);
+    let links = args.recursively_get_links_from_website(None, &mut set).await;
     let get_elapsed = now.elapsed().as_secs().to_string().bright_magenta();
 
     if links.urls.len() == 0 {
@@ -73,7 +77,12 @@ fn main() {
         let mut response = String::new();
         for link in &links.urls {
             if !link.starts_with("mailto") {
-                let status = args.is_broken(link.to_string());
+                let status = if link.starts_with(&args.url) {
+                    // Since we've already fetched this URL and received back HTML for it, we can safely assume that it not broken.
+                    "200 OK".to_string()
+                } else {
+                    args.is_broken(link.to_string()).await
+                };
                 let msg = match status.as_str() {
                     "200 OK" => "✅".to_string(),
                     "URL Error" => "CANNOT RESOLVE ❌".bright_red().to_string(),

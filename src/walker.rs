@@ -1,7 +1,9 @@
+use reqwest::{header::USER_AGENT, Client};
 use scraper::{Html, Selector};
 use std::collections::hash_set::HashSet;
 use url::Url;
 
+use async_recursion::async_recursion;
 use colored::*;
 
 #[allow(dead_code)]
@@ -10,6 +12,7 @@ pub struct Args {
     pub url: String,
     pub search_relative: bool,
     pub debug: bool,
+    pub client: Client,
 }
 
 #[derive(Debug)]
@@ -33,23 +36,30 @@ impl URLs {
 }
 
 impl Args {
-    pub fn get(
-        &self,
-        url: String,
-        debug: Option<bool>,
-    ) -> Result<reqwest::blocking::Response, String> {
+    pub async fn get(&self, url: String, debug: Option<bool>) -> Result<reqwest::Response, String> {
         if debug.unwrap_or(false) {
             println!("{}", format!("[DEBUG] Fetching {url}").bright_purple())
         }
 
-        match reqwest::blocking::get(url) {
+        match self
+            .client
+            .get(url)
+            .header(USER_AGENT, "Walker - Recursive link checker.")
+            .send()
+            .await
+        {
             Ok(n) => Ok(n),
             Err(e) => Err(format!("ERROR: cannot fetch URL: {}", e)),
         }
     }
 
-    pub fn is_broken(&self, url: String) -> String {
-        let status = match self.get(url, None) {
+    pub async fn is_broken(&self, url: String) -> String {
+        // let status = match self.get(url, None) {
+        //     Ok(n) => n..status().to_string(),
+        //     Err(_) => "URL Error".to_string(),
+        // };
+
+        let status = match self.get(url, None).await {
             Ok(n) => n.status().to_string(),
             Err(_) => "URL Error".to_string(),
         };
@@ -57,14 +67,14 @@ impl Args {
         status
     }
 
-    pub fn get_html(&self, url: String) -> Result<String, Box<dyn std::error::Error>> {
-        let res = self.get(url, Some(self.debug)).unwrap().text()?;
+    pub async fn get_html(&self, url: String) -> Result<String, Box<dyn std::error::Error>> {
+        let res = self.get(url, Some(self.debug)).await?.text().await?;
 
         Ok(res)
     }
 
-    pub fn parse_html(&self, nested_url: String) -> Html {
-        let html = self.get_html(nested_url).unwrap();
+    pub async fn parse_html(&self, nested_url: String) -> Html {
+        let html = self.get_html(nested_url).await.unwrap();
         let document = Html::parse_document(html.as_str());
 
         return document;
@@ -100,11 +110,12 @@ impl Args {
         }
     }
 
-    fn filter_a_tags(&self, url: String) -> Vec<String> {
+    pub async fn filter_a_tags(&self, url: String) -> Vec<String> {
         let mut v = vec![];
-        let document = self.parse_html(url);
+        let document = self.parse_html(url).await;
 
         let a_tags_selector = self.get_tag_by_name("a");
+
         let a_tags = document.select(&a_tags_selector);
 
         for tags in a_tags {
@@ -150,7 +161,8 @@ impl Args {
         )
     }
 
-    pub fn recursively_get_links_from_website(
+    #[async_recursion]
+    pub async fn recursively_get_links_from_website(
         &self,
         url: Option<String>,
         set: &mut HashSet<String>,
@@ -170,12 +182,13 @@ impl Args {
             urls: HashSet::new(),
         };
 
-        for href in a_tags {
+        for href in a_tags.await {
             if self.is_relative_url(&href) {
                 let parent_url = self.remove_trailing_slashes(self.get_effective_href(href));
                 if self.search_relative {
                     let nested_a_tags = self
                         .filter_a_tags(parent_url)
+                        .await
                         .into_iter()
                         .map(|x| {
                             let curr = if self.is_relative_url(&x) {
@@ -198,7 +211,7 @@ impl Args {
                         urls.push(cl2);
                         if tag.starts_with(&self.url) {
                             if !set.contains(&tag) {
-                                let a_tags = self.filter_a_tags(tag);
+                                let a_tags = self.filter_a_tags(tag).await;
 
                                 set.insert(cl);
 
@@ -215,7 +228,8 @@ impl Args {
                                                 .recursively_get_links_from_website(
                                                     Some(fixed),
                                                     set,
-                                                );
+                                                )
+                                                .await;
 
                                             for link in recursed_urls.urls {
                                                 let cl = link.clone();
