@@ -4,8 +4,8 @@ use std::fs::{create_dir, write};
 use std::path::PathBuf;
 use std::time::Instant;
 
-use futures::future::try_join_all;
-use reqwest::Url;
+use futures::future::join_all;
+use reqwest::{Error, StatusCode, Url};
 use std::net::ToSocketAddrs;
 
 use arboard::Clipboard;
@@ -76,8 +76,8 @@ async fn main() {
             .filter(|x| !x.starts_with("mailto"))
             .collect(),
     )
-    .await
-    .unwrap();
+    .await;
+
     if links.urls.len() == 0 {
         eprintln!("It looks like the site is probably client-side rendered. In this case, something like puppeteer would be needed.")
     } else {
@@ -92,26 +92,25 @@ async fn main() {
         println!("Received {} links. Iterating now...", links.urls.len());
         let mut response = String::new();
 
-        println!("STATUS: {:#?}", statuses);
         for href in statuses {
-            println!("{:#?}", href);
-            // if cli_args.construct {
-            //     response.push_str(format!("{}: {}\n", link, status).as_str());
-            // }
+            let message = match href {
+                Ok((url, status_code)) => {
+                    format!("{}: {}", url, format!("{}", status_code).bright_green())
+                }
 
-            // let status = if link.starts_with(&args.url) {
-            //     // Since we've already fetched this URL and received back HTML for it, we can safely assume that it not broken.
-            //     "200 OK".to_string()
-            // } else {
-            //     args.is_broken(link.to_string()).await
-            // };
-            // let msg = match status.as_str() {
-            //     "200 OK" => "✅".to_string(),
-            //     "URL Error" => "CANNOT RESOLVE ❌".bright_red().to_string(),
-            //     _ => "❌".to_string(),
-            // };
+                Err(e) => format!(
+                    "Some error occurred with this URL: {}",
+                    e.to_string().bright_red()
+                ),
+            };
 
-            // println!("{}: {}", link, msg)
+            if cli_args.construct {
+                response.push_str(format!("{message}\n").as_str());
+            }
+
+
+
+            println!("{}", message);
         }
 
         let loop_elapsed = now.elapsed().as_secs().to_string().bright_magenta();
@@ -138,7 +137,7 @@ async fn main() {
         if cli_args.construct {
             match clipboard.set_text(response) {
                 Ok(_) => println!("Copied response to clipboard."),
-                Err(e) => println!(
+                Err(e) => eprintln!(
                     "{}",
                     format!(
                         "Some error occurred while copying to clipboard: {}",
@@ -200,10 +199,7 @@ fn get_current_working_dir() -> String {
 async fn check_status(
     client: reqwest::Client,
     urls: Vec<String>,
-) -> Result<
-    Vec<(std::string::String, reqwest::StatusCode)>,
-    (std::string::String, reqwest::StatusCode),
-> {
+) -> Vec<Result<(String, StatusCode), Error>> {
     let correct = urls
         .clone()
         .into_iter()
@@ -221,9 +217,7 @@ async fn check_status(
             true
         })
         .collect::<Vec<String>>();
-    println!("Correct: {:#?}", correct);
     let futures = correct.iter().map(|url| {
-        println!("at {}", url);
         let req = client.head(url);
         async move {
             req.send().await.map(|response| {
@@ -233,10 +227,10 @@ async fn check_status(
                 return (str_url, status);
             })
         }
-    }); // bla
-    let results = try_join_all(futures).await;
+    });
+    let results = join_all(futures).await;
 
-    Ok(results.unwrap())
+    results
 }
 
 fn is_valid_url(url: String) -> bool {
