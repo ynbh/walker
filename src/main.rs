@@ -233,7 +233,7 @@ async fn check_status(
                 return (str_url, status);
             })
         }
-    });
+    }); // bla
     let results = try_join_all(futures).await;
 
     Ok(results.unwrap())
