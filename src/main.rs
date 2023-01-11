@@ -4,9 +4,12 @@ use std::fs::{create_dir, write};
 use std::path::PathBuf;
 use std::time::Instant;
 
+use futures::future::try_join_all;
+use reqwest::Url;
+use std::net::ToSocketAddrs;
+
 use arboard::Clipboard;
 use colored::*;
-use url::Url;
 
 use clap::Parser;
 
@@ -40,28 +43,41 @@ struct CLIArgs {
 async fn main() {
     let cli_args = CLIArgs::parse();
 
-    let args = walker::Args {
+    let mut args = walker::Args {
         url: cli_args.url,
         search_relative: cli_args.relative,
         debug: cli_args.debug,
         client: reqwest::Client::new(),
+        set: HashSet::new(),
     };
     if cli_args.singular {
         return println!(
             "{:#?}",
-            args.get(args.url.to_string(), Some(false)).await
-                .unwrap()
-                .text()
-                .await
+            dbg!(("www.icsscsummerofcode.com", 80).to_socket_addrs())
         );
     }
 
-    let mut set: HashSet<String> = HashSet::new();
     println!("Running...");
     let now = Instant::now();
-    let links = args.recursively_get_links_from_website(None, &mut set).await;
+    let links = args.recursively_get_links_from_website(None).await;
     let get_elapsed = now.elapsed().as_secs().to_string().bright_magenta();
 
+    let sing = reqwest::Client::builder()
+        .danger_accept_invalid_certs(true)
+        .build()
+        .unwrap();
+
+    let statuses = check_status(
+        sing,
+        links
+            .urls
+            .clone()
+            .into_iter()
+            .filter(|x| !x.starts_with("mailto"))
+            .collect(),
+    )
+    .await
+    .unwrap();
     if links.urls.len() == 0 {
         eprintln!("It looks like the site is probably client-side rendered. In this case, something like puppeteer would be needed.")
     } else {
@@ -75,26 +91,27 @@ async fn main() {
         let now = Instant::now();
         println!("Received {} links. Iterating now...", links.urls.len());
         let mut response = String::new();
-        for link in &links.urls {
-            if !link.starts_with("mailto") {
-                let status = if link.starts_with(&args.url) {
-                    // Since we've already fetched this URL and received back HTML for it, we can safely assume that it not broken.
-                    "200 OK".to_string()
-                } else {
-                    args.is_broken(link.to_string()).await
-                };
-                let msg = match status.as_str() {
-                    "200 OK" => "✅".to_string(),
-                    "URL Error" => "CANNOT RESOLVE ❌".bright_red().to_string(),
-                    _ => "❌".to_string(),
-                };
 
-                if cli_args.construct {
-                    response.push_str(format!("{}: {}\n", link, msg).as_str());
-                }
+        println!("STATUS: {:#?}", statuses);
+        for href in statuses {
+            println!("{:#?}", href);
+            // if cli_args.construct {
+            //     response.push_str(format!("{}: {}\n", link, status).as_str());
+            // }
 
-                println!("{}: {}", link, msg)
-            }
+            // let status = if link.starts_with(&args.url) {
+            //     // Since we've already fetched this URL and received back HTML for it, we can safely assume that it not broken.
+            //     "200 OK".to_string()
+            // } else {
+            //     args.is_broken(link.to_string()).await
+            // };
+            // let msg = match status.as_str() {
+            //     "200 OK" => "✅".to_string(),
+            //     "URL Error" => "CANNOT RESOLVE ❌".bright_red().to_string(),
+            //     _ => "❌".to_string(),
+            // };
+
+            // println!("{}: {}", link, msg)
         }
 
         let loop_elapsed = now.elapsed().as_secs().to_string().bright_magenta();
@@ -178,4 +195,65 @@ fn get_current_working_dir() -> String {
         Ok(path) => path.into_os_string().into_string().unwrap(),
         Err(_) => "FAILED".to_string(),
     }
+}
+
+async fn check_status(
+    client: reqwest::Client,
+    urls: Vec<String>,
+) -> Result<
+    Vec<(std::string::String, reqwest::StatusCode)>,
+    (std::string::String, reqwest::StatusCode),
+> {
+    let correct = urls
+        .clone()
+        .into_iter()
+        .filter(|x| {
+            let is_valid_url = is_valid_url(x.to_string());
+            let matchable = match Url::parse(x) {
+                Ok(_) => true,
+                Err(_) => false,
+            };
+
+            if !is_valid_url || !matchable {
+                return false;
+            }
+
+            true
+        })
+        .collect::<Vec<String>>();
+    println!("Correct: {:#?}", correct);
+    let futures = correct.iter().map(|url| {
+        println!("at {}", url);
+        let req = client.head(url);
+        async move {
+            req.send().await.map(|response| {
+                let status = response.status();
+                let str_url = url.to_string();
+
+                return (str_url, status);
+            })
+        }
+    });
+    let results = try_join_all(futures).await;
+
+    Ok(results.unwrap())
+}
+
+fn is_valid_url(url: String) -> bool {
+    url.starts_with("http") || url.starts_with("https")
+}
+
+pub fn base_url(mut url: Url) -> Result<String, String> {
+    match url.path_segments_mut() {
+        Ok(mut path) => {
+            path.clear();
+        }
+        Err(_) => {
+            return Err("Cannot base URL".to_string());
+        }
+    }
+
+    url.set_query(None);
+
+    Ok(url.to_string())
 }

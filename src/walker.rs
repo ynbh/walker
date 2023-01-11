@@ -1,7 +1,7 @@
 use reqwest::{header::USER_AGENT, Client};
 use scraper::{Html, Selector};
 use std::collections::hash_set::HashSet;
-use url::Url;
+use reqwest::Url;
 
 use async_recursion::async_recursion;
 use colored::*;
@@ -13,6 +13,7 @@ pub struct Args {
     pub search_relative: bool,
     pub debug: bool,
     pub client: Client,
+    pub set: HashSet<String>,
 }
 
 #[derive(Debug)]
@@ -23,7 +24,9 @@ pub struct URLs {
 impl URLs {
     fn push(&mut self, value: String) {
         if value != "" {
-            self.urls.insert(self.remove_trailing_slashes(value));
+            if !self.urls.contains(&value) {
+                self.urls.insert(self.remove_trailing_slashes(value));
+            }
         }
     }
 
@@ -53,12 +56,7 @@ impl Args {
         }
     }
 
-    pub async fn is_broken(&self, url: String) -> String {
-        // let status = match self.get(url, None) {
-        //     Ok(n) => n..status().to_string(),
-        //     Err(_) => "URL Error".to_string(),
-        // };
-
+    pub async fn _is_broken(&self, url: String) -> String {
         let status = match self.get(url, None).await {
             Ok(n) => n.status().to_string(),
             Err(_) => "URL Error".to_string(),
@@ -148,25 +146,17 @@ impl Args {
         let parsed = Url::parse(&self.url).unwrap();
 
         let base_url = match self.base_url(parsed) {
-            Ok(n) => n.to_string(),
+            Ok(n) => self.remove_trailing_slashes(n.to_string()),
             Err(e) => format!("An error occurred: {}", e),
         };
 
-        let relative_split = href.split("https://ynb.sh").collect::<Vec<&str>>()[0];
+        let relative_split = href.split(self.url.as_str()).collect::<Vec<&str>>()[0];
 
-        format!(
-            "{}{}",
-            self.remove_trailing_slashes(base_url),
-            relative_split
-        )
+        format!("{}{}", base_url, relative_split)
     }
 
     #[async_recursion]
-    pub async fn recursively_get_links_from_website(
-        &self,
-        url: Option<String>,
-        set: &mut HashSet<String>,
-    ) -> URLs {
+    pub async fn recursively_get_links_from_website(&mut self, url: Option<String>) -> URLs {
         let effective_url = match url {
             Some(k) => k,
             None => {
@@ -176,106 +166,115 @@ impl Args {
             }
         };
 
-        let a_tags = self.filter_a_tags(effective_url);
-
         let mut urls = URLs {
             urls: HashSet::new(),
         };
 
-        for href in a_tags.await {
-            if self.is_relative_url(&href) {
-                let parent_url = self.remove_trailing_slashes(self.get_effective_href(href));
-                if self.search_relative {
-                    let nested_a_tags = self
-                        .filter_a_tags(parent_url)
-                        .await
-                        .into_iter()
-                        .map(|x| {
-                            let curr = if self.is_relative_url(&x) {
-                                self.remove_trailing_slashes(self.get_effective_href(x))
-                            } else {
-                                x
-                            };
-                            if !set.contains(&curr) {
-                                return curr;
-                            } else {
-                                return "".to_string();
-                            }
-                        })
-                        .collect::<Vec<String>>();
+        if !self.set.contains(&effective_url) {
+            let a_tags = self
+                .filter_a_tags(self.remove_trailing_slashes(effective_url))
+                .await;
 
-                    for tag in nested_a_tags {
-                        // println!("diagnosis: 133 {}", tag);
-                        let cl = tag.clone();
-                        let cl2 = tag.clone();
-                        urls.push(cl2);
-                        if tag.starts_with(&self.url) {
-                            if !set.contains(&tag) {
-                                let a_tags = self.filter_a_tags(tag).await;
+            for href in a_tags {
+                if self.is_relative_url(&href) {
+                    let parent_url = self.remove_trailing_slashes(self.get_effective_href(href));
+                    if self.search_relative {
+                        let nested_a_tags = self
+                            .filter_a_tags(parent_url)
+                            .await
+                            .into_iter()
+                            .map(|x| {
+                                let curr = if self.is_relative_url(&x) {
+                                    self.remove_trailing_slashes(self.get_effective_href(x))
+                                } else {
+                                    x
+                                };
+                                if !self.set.contains(&curr) {
+                                    return curr;
+                                } else {
+                                    return "".to_string();
+                                }
+                            })
+                            .collect::<Vec<String>>();
 
-                                set.insert(cl);
+                        for tag in nested_a_tags {
+                            // println!("diagnosis: 133 {}", tag);
+                            let cl = tag.clone();
+                            let cl2 = tag.clone();
+                            urls.push(cl2);
+                            if tag.starts_with(&self.url) {
+                                if !self.set.contains(&tag) {
+                                    let a_tags = self.filter_a_tags(tag).await;
 
-                                for href in &a_tags {
-                                    if self.is_relative_url(&href) {
-                                        let fixed = self.remove_trailing_slashes(
-                                            self.get_effective_href(href.to_string()),
-                                        );
-                                        let cl = fixed.clone();
-                                        let cl2 = fixed.clone();
-                                        urls.push(cl);
-                                        if !set.contains(&fixed) {
-                                            let recursed_urls = self
-                                                .recursively_get_links_from_website(
-                                                    Some(fixed),
-                                                    set,
-                                                )
-                                                .await;
+                                    self.set.insert(cl);
 
-                                            for link in recursed_urls.urls {
-                                                let cl = link.clone();
-                                                urls.push(link);
-                                                if !set.contains(&cl) {
-                                                    let link_cl = cl.clone();
+                                    for href in &a_tags {
+                                        if self.is_relative_url(&href) {
+                                            let fixed = self.remove_trailing_slashes(
+                                                self.get_effective_href(href.to_string()),
+                                            );
+                                            let cl = fixed.clone();
+                                            let cl2 = fixed.clone();
+                                            urls.push(cl);
+                                            if !self.set.contains(&fixed) {
+                                                let recursed_urls = self
+                                                    .recursively_get_links_from_website(Some(fixed))
+                                                    .await;
 
-                                                    set.insert(link_cl);
+                                                for link in recursed_urls.urls {
+                                                    let cl = link.clone();
+                                                    urls.push(link);
+                                                    if !self.set.contains(&cl) {
+                                                        let link_cl = cl.clone();
+
+                                                        self.insert(link_cl);
+                                                    }
                                                 }
-                                            }
 
-                                            set.insert(cl2);
+                                                self.insert(cl2);
+                                            }
+                                        } else {
+                                            let fixed =
+                                                self.remove_trailing_slashes((&href).to_string());
+                                            let fixed_cl = fixed.clone();
+                                            urls.push(fixed);
+                                            self.insert(fixed_cl);
                                         }
-                                    } else {
-                                        let fixed =
-                                            self.remove_trailing_slashes((&href).to_string());
-                                        let fixed_cl = fixed.clone();
-                                        urls.push(fixed);
-                                        set.insert(fixed_cl);
                                     }
                                 }
-                            }
-                        } else {
-                            let cl = tag.clone();
+                            } else {
+                                let cl = tag.clone();
 
-                            urls.push(tag);
-                            set.insert(cl);
+                                urls.push(tag);
+                                self.insert(cl);
+                            }
                         }
+                    } else {
+                        let cl = parent_url.clone();
+                        urls.push(parent_url);
+                        self.insert(cl);
                     }
                 } else {
-                    let cl = parent_url.clone();
-                    urls.push(parent_url);
-                    set.insert(cl);
-                }
-            } else {
-                let cl = href.clone();
-                let fixed = self.remove_trailing_slashes(cl);
+                    let cl = href.clone();
+                    let fixed = self.remove_trailing_slashes(cl);
 
-                let cl_fixed = fixed.clone();
-                urls.push(cl_fixed);
-                if !set.contains(&fixed) {
-                    set.insert(fixed);
+                    let cl_fixed = fixed.clone();
+                    urls.push(cl_fixed);
+                    if !self.set.contains(&fixed) {
+                        self.insert(fixed);
+                    }
                 }
             }
         }
 
-        return urls;
+        urls
+    }
+
+    fn insert(&mut self, value: String) {
+        if value != "" {
+            if !self.set.contains(&value) {
+                self.set.insert(value.clone());
+            }
+        }
     }
 }
