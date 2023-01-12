@@ -6,10 +6,10 @@ use std::time::Instant;
 
 use futures::future::join_all;
 use reqwest::{Error, StatusCode, Url};
-use std::net::ToSocketAddrs;
 
 use arboard::Clipboard;
 use colored::*;
+use std::net::ToSocketAddrs;
 
 use clap::Parser;
 
@@ -51,9 +51,15 @@ async fn main() {
         set: HashSet::new(),
     };
     if cli_args.singular {
+        let parsed = Url::parse(&args.url).unwrap();
+        let base_url = args.base_url(parsed).unwrap().to_string();
+        let domain: String = args.remove_trailing_slashes(
+            base_url.split("//").into_iter().collect::<Vec<&str>>()[1].to_string(),
+        );
+        
         return println!(
             "{:#?}",
-            dbg!(("www.icsscsummerofcode.com", 80).to_socket_addrs())
+            dbg!((domain, 80).to_socket_addrs())
         );
     }
 
@@ -98,17 +104,12 @@ async fn main() {
                     format!("{}: {}", url, format!("{}", status_code).bright_green())
                 }
 
-                Err(e) => format!(
-                    "Some error occurred with this URL: {}",
-                    e.to_string().bright_red()
-                ),
+                Err(e) => format!("An error occurred: {}", e.to_string().bright_red()),
             };
 
             if cli_args.construct {
-                response.push_str(format!("{message}\n").as_str());
+                response.push_str(format!("{}\n", message.to_string()).as_str());
             }
-
-
 
             println!("{}", message);
         }

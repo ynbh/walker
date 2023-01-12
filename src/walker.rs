@@ -44,7 +44,14 @@ impl Args {
             println!("{}", format!("[DEBUG] Fetching {url}").bright_purple())
         }
 
-        match self
+		if self.set.contains(&url) {
+			if self.set.contains(&url) {
+				return Err("URL already visited".to_string());
+			}
+		}
+
+        
+			return match self
             .client
             .get(url)
             .header(USER_AGENT, "Walker - Recursive link checker.")
@@ -54,6 +61,7 @@ impl Args {
             Ok(n) => Ok(n),
             Err(e) => Err(format!("ERROR: cannot fetch URL: {}", e)),
         }
+	
     }
 
     pub async fn _is_broken(&self, url: String) -> String {
@@ -110,6 +118,11 @@ impl Args {
 
     pub async fn filter_a_tags(&self, url: String) -> Vec<String> {
         let mut v = vec![];
+
+
+		if self.set.contains(&url) {
+			return v
+		}
         let document = self.parse_html(url).await;
 
         let a_tags_selector = self.get_tag_by_name("a");

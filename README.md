@@ -1,12 +1,14 @@
 # Walker
 
-Walker is a tool that performs a recursive analysis of a website, including all subdirectories and pages, to search for faulty links. It operates under the premise that the homepage of the site in question leads to other pages within the website, which subsequently lead to yet more pages. To optimize speed, all URLs that have already been encountered are cached in a `HashSet` to prevent duplicate `fetch` requests. The `urls` `HashSet` contained within the `URls` struct stores all URLs that return a successful `200 OK` response. 
+Walker is a tool that performs a recursive analysis of a website, including all subdirectories and pages, to search for faulty links. It operates under the premise that the homepage of the site in question leads to other pages within the website, which subsequently lead to yet more pages. To optimize speed, all URLs that have already been encountered are cached in a `HashSet` to prevent duplicate `fetch` requests. The `urls` `HashSet` contained within the `URLs` struct stores all URLs that return a successful `200 OK` response. All requests occur concurrently, so the process is fast as fuck.
 
 It is worth noting that this process may take an indeterminate amount of time, as a website may contain an infinite number of nested links. A potential future update to the recursive function could be the addition of a `depth` parameter, which would restrict recursion to only a specified number of levels. I don't plan on implementing this any time soon, though!
 
 ## Quirks
 
-Since the implementation of this tool works through fetching the HTML of the website in question, it would be impossible to detect, or perhaps even retrieve the initial HTML, for websites that render on the client. Therefore, `walker` only works for static and server-rendered sites. It should be noted that when I mention server-rendered, I mean websites that fetch all HTML in their initial request to the server, and not just selective data like `meta` tags for bots to crawl.
+Since the implementation of this tool works through fetching the HTML of the website in question, it would be impossible to detect, or perhaps even retrieve the initial HTML, for websites that render on the client. 
+
+Therefore, `walker` only works for static and server-rendered sites. It should be noted that when I mention server-rendered, I mean websites that fetch all HTML in their initial request to the server, and not just selective data like `meta` tags for bots to crawl.
 
 There could be cases where some parts of the website are server-rendered, while some of them are client-side rendered. In these cases, `walker` will only parse and verify links it can find on the server-side rendered HTML.
 
@@ -39,35 +41,39 @@ walker --url "https://ynb.sh"
 
 ```bash
 Received 4 links. Iterating now...
-https://github.com/ynbh: ✅
-https://ynb.sh/posts: ✅
-https://ynb.sh: ✅
+https://ynb.sh/posts: 200 OK
+https://github.com/ynbh: 200 OK
+https://ynb.sh: 200 OK
+Stats
+Time to get all links: 0 seconds
+Time to verify links: 0 seconds
 ```
 
 But when used with the `-r` argument, it would result in something like:
 
 ```bash
-Received 16 links. Iterating now...
-http://zeroclipboard.org: ❌
-https://ynb.sh/assets/toefl-speaking-template.png: ✅
-https://ynb.sh/posts/free-speech-and-some-concerns: ✅
-https://ynb.sh: ✅
-https://ynb.sh/posts: ✅
-https://github.com/ynbh: ✅
-https://en.wikipedia.org/wiki/Test_of_English_as_a_Foreign_Language: ✅
-https://ynb.sh/assets/toefl-speaking.png: ✅
-https://ynb.sh/assets/toefl-writing-template.png: ✅
-https://www.toeflresources.com/speaking-section/toefl-speaking-templates: ✅
-https://ynb.sh/assets/toefl-listening.png: ✅
-https://ynb.sh/assets/toefl-writing.png: ✅
-https://ynb.sh/posts/black-panther-wakanda-forever-review: ✅
-https://ynb.sh/posts/preparing-for-and-writing-the-TOEFL: ✅
-https://ynb.sh/assets/toefl-reading.png: ✅
+Received 17 links. Iterating now...
+https://en.wikipedia.org/wiki/Test_of_English_as_a_Foreign_Language: 200 OK
+https://ynb.sh/assets/toefl-listening.png: 200 OK
+https://ynb.sh/assets/toefl-reading.png: 200 OK
+https://ynb.sh/posts/preparing-for-and-writing-the-TOEFL: 200 OK
+An error occurred: error sending request for url (http://www.icsscsummerofcode.com/): error trying to connect: dns error: failed to lookup address information: nodename nor servname provided, or not known
+https://ynb.sh/posts: 200 OK
+https://ynb.sh/assets/toefl-writing-template.png: 200 OK
+https://www.toeflresources.com/speaking-section/toefl-speaking-templates: 200 OK
+https://ynb.sh/assets/toefl-speaking.png: 200 OK
+https://ynb.sh: 200 OK
+https://ynb.sh/assets/toefl-writing.png: 200 OK
+http://zeroclipboard.org: 500 Internal Server Error
+https://github.com/ynbh: 200 OK
+https://ynb.sh/posts/free-speech-and-some-concerns: 200 OK
+https://ynb.sh/posts/black-panther-wakanda-forever-review: 200 OK
+https://ynb.sh/assets/toefl-speaking-template.png: 200 OK
 Stats
-Time to get all links: 3 seconds
-Time to verify links: 5 seconds
+Time to get all links: 1 seconds
+Time to verify links: 0 seconds
 ```
 
 To debug what URL `walker` is currently fetching, simply pass it a `-d` debug flag. 
 
-In situations where `walker` is unable to resolve some arbitrary URL, it will show a message stating `CANNOT RESOLVE ❌`. The URL is either no longer valid, or there is some kind of block that is making it unable to properly resolve the URL. Either way, it is best to visit the website itself and check if it loads for you.
+In situations where `walker` is unable to resolve some arbitrary URL, it will properly show the error while verifying all the links. Often, this error occurs because `reqwest` is unable to resolve its DNS. You can check if that is the case by running `walker --url <URL> -s`. If it does not return an error, there is probably something else going on with the URL that needs to be looked at.
