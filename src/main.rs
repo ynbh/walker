@@ -56,11 +56,8 @@ async fn main() {
         let domain: String = args.remove_trailing_slashes(
             base_url.split("//").into_iter().collect::<Vec<&str>>()[1].to_string(),
         );
-        
-        return println!(
-            "{:#?}",
-            dbg!((domain, 80).to_socket_addrs())
-        );
+
+        return println!("{:#?}", dbg!((domain, 80).to_socket_addrs()));
     }
 
     println!("Running...");
@@ -99,19 +96,29 @@ async fn main() {
         let mut response = String::new();
 
         for href in statuses {
-            let message = match href {
+            let (k, v) = match href {
                 Ok((url, status_code)) => {
-                    format!("{}: {}", url, format!("{}", status_code).bright_green())
+                    println!(
+                        "{}",
+                        format!("{}: {}", url, format!("{}", status_code).bright_green())
+                    );
+
+                    (format!("{url}: "), format!("{status_code}"))
                 }
 
-                Err(e) => format!("An error occurred: {}", e.to_string().bright_red()),
+                Err(e) => {
+                    println!(
+                        "{}",
+                        format!("ERROR: {}", format!("{:#?}", e.to_string()).bright_red())
+                    );
+
+                    (format!("ERROR: "), format!("{:#?}", e.to_string()))
+                }
             };
 
             if cli_args.construct {
-                response.push_str(format!("{}\n", message.to_string()).as_str());
+                response.push_str(format!("{k}{v}\n",).as_str());
             }
-
-            println!("{}", message);
         }
 
         let loop_elapsed = now.elapsed().as_secs().to_string().bright_magenta();

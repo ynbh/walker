@@ -5,4 +5,4 @@
  cp target/release/walker download/macOS/walker &&
  echo "Saved to download/macOS" &&
  gth --input "README.md" --output "index.html" -w -b && 
- commit -m $1
+ commit -m "add"
