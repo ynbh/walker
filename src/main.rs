@@ -78,6 +78,7 @@ async fn main() {
             .into_iter()
             .filter(|x| !x.starts_with("mailto"))
             .collect(),
+        Some(cli_args.debug),
     )
     .await;
 
@@ -207,6 +208,7 @@ fn get_current_working_dir() -> String {
 async fn check_status(
     client: reqwest::Client,
     urls: Vec<String>,
+    debug: Option<bool>,
 ) -> Vec<Result<(String, StatusCode), Error>> {
     let correct = urls
         .clone()
@@ -227,6 +229,9 @@ async fn check_status(
         .collect::<Vec<String>>();
     let futures = correct.iter().map(|url| {
         let req = client.head(url);
+        if debug.unwrap() {
+            println!("Verifying {}", url.bright_yellow());
+        }
         async move {
             req.send().await.map(|response| {
                 let status = response.status();
