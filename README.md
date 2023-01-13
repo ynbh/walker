@@ -93,4 +93,4 @@ In situations where `walker` is unable to resolve some arbitrary URL, it will pr
 
 ## Read
 
-https://ynb.sh/posts/walker
+[Blog post detailing how I made this tool.](https://ynb.sh/posts/walker)
