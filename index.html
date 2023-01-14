@@ -1,48 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Markdown To HTML</title>
 
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Markdown To HTML</title>
-  
-        <style>
-          .outline {
-                margin: 0px;
-                max-width: 900px;
-                overflow: auto;
-                text-overflow: ellipsis;
-                border: 1px solid #e1e4e8;
-                padding: 10px 40px;
-                padding-bottom: 20px;
-                border-radius: 2px;
-                margin-left: auto;
-                margin-right: auto;
-        }
-          body {
-        font: 400 16px/1.5 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    <style>
+      .outline {
+        margin: 0px;
+        max-width: 900px;
+        overflow: auto;
+        text-overflow: ellipsis;
+        border: 1px solid #e1e4e8;
+        padding: 10px 40px;
+        padding-bottom: 20px;
+        border-radius: 2px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      body {
+        font: 400 16px/1.5 "Helvetica Neue", Helvetica, Arial, sans-serif;
         color: #111;
         background-color: #fdfdfd;
         -webkit-text-size-adjust: 100%;
-        -webkit-font-feature-settings: 'kern' 1;
-        -moz-font-feature-settings: 'kern' 1;
-        -o-font-feature-settings: 'kern' 1;
-        font-feature-settings: 'kern' 1;
+        -webkit-font-feature-settings: "kern" 1;
+        -moz-font-feature-settings: "kern" 1;
+        -o-font-feature-settings: "kern" 1;
+        font-feature-settings: "kern" 1;
         font-kerning: normal;
         padding: 30px;
       }
-      
+
       @media only screen and (max-width: 600px) {
         body {
           padding: 5px;
         }
-      
+
         main {
           padding: 0px 20px 20px 20px !important;
         }
       }
-      
+
       main {
         margin: 0px;
         max-width: 900px;
@@ -53,7 +52,7 @@
         margin-left: auto;
         margin-right: auto;
       }
-      
+
       hr {
         color: #bbb;
         background-color: #bbb;
@@ -63,7 +62,7 @@
         padding: 0;
         border: none;
       }
-      
+
       /**
        * Links
        */
@@ -78,7 +77,7 @@
         color: #0366d6;
         text-decoration: underline;
       }
-      
+
       pre {
         background-color: #f6f8fa;
         border-radius: 3px;
@@ -87,11 +86,11 @@
         overflow: auto;
         padding: 16px;
       }
-      
+
       /**
         * Code blocks
         */
-      
+
       code {
         background-color: rgba(27, 31, 35, 0.05);
         border-radius: 3px;
@@ -102,7 +101,7 @@
         font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, Courier,
           monospace;
       }
-      
+
       pre > code {
         background-color: transparent;
         border: 0;
@@ -114,7 +113,7 @@
         word-wrap: normal;
         font-size: 100%;
       }
-      
+
       /**
        * Blockquotes
        */
@@ -136,7 +135,7 @@
         letter-spacing: 0;
         color: #6a737d !important;
       }
-      
+
       /**
        * Tables
        */
@@ -150,67 +149,67 @@
         border-spacing: 0;
         border-collapse: collapse;
       }
-      
+
       td {
         padding: 6px 13px;
         border: 1px solid #dfe2e5;
       }
-      
+
       th {
         font-weight: 600;
         padding: 6px 13px;
         border: 1px solid #dfe2e5;
       }
-      
+
       tr {
         background-color: #fff;
         border-top: 1px solid #c6cbd1;
       }
-      
+
       table tr:nth-child(2n) {
         background-color: #f6f8fa;
       }
-      
+
       /**
        * Others
        */
-      
+
       img {
         max-width: 100%;
       }
-      
+
       p {
         line-height: 24px;
         font-weight: 400;
         font-size: 16px;
         color: #24292e;
       }
-      
+
       ul {
         margin-top: 0;
       }
-      
+
       li {
         color: #24292e;
         font-size: 16px;
         font-weight: 400;
         line-height: 1.5;
       }
-      
+
       li + li {
         margin-top: 0.25em;
       }
-      
+
       * {
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial,
-          sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica,
+          Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+          "Segoe UI Symbol";
         color: #24292e;
       }
-      
+
       a:visited {
         color: #0366d6;
       }
-      
 
       h1 {
         border-bottom: 1px solid #eaecef;
@@ -227,34 +226,115 @@
       h3 {
         color: #111;
       }
-      
-        </style>
-    </head>
-    <body>
-        <div class="outline">
-   
-        <h1>Walker</h1>
-<p>Walker is a tool that performs a recursive analysis of a website, including all subdirectories and pages, to search for faulty links. It operates under the premise that the homepage of the site in question leads to other pages within the website, which subsequently lead to yet more pages. To optimize speed, all URLs that have already been encountered are cached in a <code>HashSet</code> to prevent duplicate <code>fetch</code> requests. The <code>urls</code> <code>HashSet</code> contained within the <code>URLs</code> struct stores all URLs that return a successful <code>200 OK</code> response. All requests occur concurrently, so the process is fast as fuck.</p>
-<p>It is worth noting that this process may take an indeterminate amount of time, as a website may contain an infinite number of nested links. A potential future update to the recursive function could be the addition of a <code>depth</code> parameter, which would restrict recursion to only a specified number of levels. I don't plan on implementing this any time soon, though!</p>
-<h2>Quirks</h2>
-<h3>Client side rendering</h3>
-<p>Since the implementation of this tool works through fetching the HTML of the website in question, it would be impossible to detect, or perhaps even retrieve the initial HTML, for websites that render on the client.</p>
-<p>Therefore, <code>walker</code> only works for static and server-rendered sites. It should be noted that when I mention server-rendered, I mean websites that fetch all HTML in their initial request to the server, and not just selective data like <code>meta</code> tags for bots to crawl.</p>
-<p>There could be cases where some parts of the website are server-rendered, while some of them are client-side rendered. In these cases, <code>walker</code> will only parse and verify links it can find on the server-side rendered HTML.</p>
-<p>I could perhaps use something like headless chrome to get the HTML for these pages, but that only adds overhead to problem I was initially trying to solve. I am not keen on making headless chrome work in Rust. That task sounds like a better job for TypeScript.</p>
-<h3>URLs</h3>
-<p>URLs are shitty. Essentially, I eventually want to be able to discern between URLs like: <a href="https://example.com#id">https://example.com#id</a> and <a href="https://example.com/#id">https://example.com/#id</a>. In the former case, <a href="https://example.com">https://example.com</a> has already been verified to be have not broken, and hence, verifying <a href="https://example.com#id">https://example.com#id</a> would be redundant, since it is not really a new URL. It's just a section within the page.</p>
-<p>Also, for some reason, there are some duplicate requests happening even after I've made sure to memoize the URLs in a <code>HashSet</code>. I am not sure <em>why</em> that happens, but it feels like a rust-specific quirk, since the same script works perfectly, albeit slow, in TypeScript. For example:</p>
-<p><img src="https://media.discordapp.net/attachments/841704583364608051/1063072047527366786/image.png" alt="Multiple requests"></p>
-<p>There is a massive performance optimization here. But I quite don't know how to achieve that. Welp, I guess I will eventually figure it out.</p>
-<h3>Rate limits</h3>
-<p>Since I don't wait between each request, some websites might enforce their rate-limiting policies on <code>walker</code>, and hence cause it to error out for URLs which are working perfectly fine. In these cases, if the API is returning semantic error codes, <code>walker</code> will display something like <code>429 Too Many Requests</code>.</p>
-<p><code>walker</code> has a timeout of 5 seconds between each request. If the URL does not return a response within 5 seconds, it will error out and show that the operation was timed out.</p>
-<h2>Examples</h2>
-<p>Examples of what the data would look like after the process is over can be found in the <a href="/data/">data</a> directory. All links in it are unique. However, the data simply only shows what links are <em>available</em> on the website, and not if they are valid or not. To see what links are functional, download the binary from <a href="/download/">download</a> and run it with a <code>--url</code> argument.</p>
-<h2>Usage</h2>
-<p>Using <code>walker</code> is easy. It has a dead-simple CLI interface that can be used to visually see the results of the analysis. Options for it are:</p>
-<pre><code class="language-bash">Options:
+    </style>
+  </head>
+  <body>
+    <div class="outline">
+      <h1>Walker</h1>
+      <p>
+        Walker is a tool that performs a recursive analysis of a website,
+        including all subdirectories and pages, to search for faulty links. It
+        operates under the premise that the homepage of the site in question
+        leads to other pages within the website, which subsequently lead to yet
+        more pages. To optimize speed, all URLs that have already been
+        encountered are cached in a <code>HashSet</code> to prevent duplicate
+        <code>fetch</code> requests. The <code>urls</code>
+        <code>HashSet</code> contained within the <code>URLs</code> struct
+        stores all URLs that return a successful <code>200 OK</code> response.
+        All requests occur concurrently, so the process is fast as fuck.
+      </p>
+      <p>
+        It is worth noting that this process may take an indeterminate amount of
+        time, as a website may contain an infinite number of nested links. A
+        potential future update to the recursive function could be the addition
+        of a <code>depth</code> parameter, which would restrict recursion to
+        only a specified number of levels. I don't plan on implementing this any
+        time soon, though!
+      </p>
+      <h2>Quirks</h2>
+      <h3>Client side rendering</h3>
+      <p>
+        Since the implementation of this tool works through fetching the HTML of
+        the website in question, it would be impossible to detect, or perhaps
+        even retrieve the initial HTML, for websites that render on the client.
+      </p>
+      <p>
+        Therefore, <code>walker</code> only works for static and server-rendered
+        sites. It should be noted that when I mention server-rendered, I mean
+        websites that fetch all HTML in their initial request to the server, and
+        not just selective data like <code>meta</code> tags for bots to crawl.
+      </p>
+      <p>
+        There could be cases where some parts of the website are
+        server-rendered, while some of them are client-side rendered. In these
+        cases, <code>walker</code> will only parse and verify links it can find
+        on the server-side rendered HTML.
+      </p>
+      <p>
+        I could perhaps use something like headless chrome to get the HTML for
+        these pages, but that only adds overhead to problem I was initially
+        trying to solve. I am not keen on making headless chrome work in Rust.
+        That task sounds like a better job for TypeScript.
+      </p>
+      <h3>URLs</h3>
+      <p>
+        URLs are shitty. Essentially, I eventually want to be able to discern
+        between URLs like:
+        <a href="https://example.com#id">https://example.com#id</a> and
+        <a href="https://example.com/#id">https://example.com/#id</a>. In the
+        former case, <a href="https://example.com">https://example.com</a> has
+        already been verified to be have not broken, and hence, verifying
+        <a href="https://example.com#id">https://example.com#id</a> would be
+        redundant, since it is not really a new URL. It's just a section within
+        the page.
+      </p>
+      <p>
+        Also, for some reason, there are some duplicate requests happening even
+        after I've made sure to memoize the URLs in a <code>HashSet</code>. I am
+        not sure <em>why</em> that happens, but it feels like a rust-specific
+        quirk, since the same script works perfectly, albeit slow, in
+        TypeScript. For example:
+      </p>
+      <p>
+        <img
+          src="https://media.discordapp.net/attachments/841704583364608051/1063072047527366786/image.png"
+          alt="Multiple requests"
+        />
+      </p>
+      <p>
+        There is a massive performance optimization here. But I quite don't know
+        how to achieve that. Welp, I guess I will eventually figure it out.
+      </p>
+      <h3>Rate limits</h3>
+      <p>
+        Since I don't wait between each request, some websites might enforce
+        their rate-limiting policies on <code>walker</code>, and hence cause it
+        to error out for URLs which are working perfectly fine. In these cases,
+        if the API is returning semantic error codes, <code>walker</code> will
+        display something like <code>429 Too Many Requests</code>.
+      </p>
+      <p>
+        <code>walker</code> has a timeout of 5 seconds between each request. If
+        the URL does not return a response within 5 seconds, it will error out
+        and show that the operation was timed out.
+      </p>
+      <h2>Examples</h2>
+      <p>
+        Examples of what the data would look like after the process is over can
+        be found in the <a href="/data/">data</a> directory. All links in it are
+        unique. However, the data simply only shows what links are
+        <em>available</em> on the website, and not if they are valid or not. To
+        see what links are functional, download the binary from
+        <a href="/download/">download</a> and run it with a
+        <code>--url</code> argument.
+      </p>
+      <h2>Usage</h2>
+      <p>
+        Using <code>walker</code> is easy. It has a dead-simple CLI interface
+        that can be used to visually see the results of the analysis. Options
+        for it are:
+      </p>
+      <pre><code class="language-bash">Options:
   -u, --url &#x3C;URL>  URL of the website to analyze links from
   -r, --relative   Whether to perform a deep search or not
   -d, --debug      Shows what URL walker is currently on
@@ -262,11 +342,11 @@
   -h, --help       Print help information
   -V, --version    Print version information
 </code></pre>
-<p>So, for example, doing:</p>
-<pre><code class="language-bash">walker --url "https://ynb.sh"
+      <p>So, for example, doing:</p>
+      <pre><code class="language-bash">walker --url "https://ynb.sh"
 </code></pre>
-<p>...would result in:</p>
-<pre><code class="language-bash">Received 4 links. Iterating now...
+      <p>...would result in:</p>
+      <pre><code class="language-bash">Received 4 links. Iterating now...
 https://ynb.sh/posts: 200 OK
 https://github.com/ynbh: 200 OK
 https://ynb.sh: 200 OK
@@ -274,8 +354,11 @@ Stats
 Time to get all links: 0 seconds
 Time to verify links: 0 seconds
 </code></pre>
-<p>But when used with the <code>-r</code> argument, it would result in something like:</p>
-<pre><code class="language-bash">Received 17 links. Iterating now...
+      <p>
+        But when used with the <code>-r</code> argument, it would result in
+        something like:
+      </p>
+      <pre><code class="language-bash">Received 17 links. Iterating now...
 https://en.wikipedia.org/wiki/Test_of_English_as_a_Foreign_Language: 200 OK
 https://ynb.sh/assets/toefl-listening.png: 200 OK
 https://ynb.sh/assets/toefl-reading.png: 200 OK
@@ -296,11 +379,25 @@ Stats
 Time to get all links: 1 seconds
 Time to verify links: 0 seconds
 </code></pre>
-<p>To debug what URL <code>walker</code> is currently fetching, simply pass it a <code>-d</code> debug flag.</p>
-<p>In situations where <code>walker</code> is unable to resolve some arbitrary URL, it will properly show the error while verifying all the links. Often, this error occurs because <code>reqwest</code> is unable to resolve its DNS. You can check if that is the case by running <code>walker --url &#x3C;URL> -s</code>. If it does not return an error, there is probably something else going on with the URL that needs to be looked at.</p>
-<h2>Read</h2>
-<p><a href="https://ynb.sh/posts/walker">Blog post detailing how I made this tool.</a></p>
-        </div>
-    </body>
-    </html>
-    
+      <p>
+        To debug what URL <code>walker</code> is currently fetching, simply pass
+        it a <code>-d</code> debug flag.
+      </p>
+      <p>
+        In situations where <code>walker</code> is unable to resolve some
+        arbitrary URL, it will properly show the error while verifying all the
+        links. Often, this error occurs because <code>reqwest</code> is unable
+        to resolve its DNS. You can check if that is the case by running
+        <code>walker --url &#x3C;URL> -s</code>. If it does not return an error,
+        there is probably something else going on with the URL that needs to be
+        looked at.
+      </p>
+      <h2>Read</h2>
+      <p>
+        <a href="https://ynb.sh/posts/walker"
+          >Blog post detailing how I made this tool.</a
+        >
+      </p>
+    </div>
+  </body>
+</html>
