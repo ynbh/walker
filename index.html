@@ -247,6 +247,9 @@
 <p>Also, for some reason, there are some duplicate requests happening even after I've made sure to memoize the URLs in a <code>HashSet</code>. I am not sure <em>why</em> that happens, but it feels like a rust-specific quirk, since the same script works perfectly, albeit slow, in TypeScript. For example:</p>
 <p><img src="https://media.discordapp.net/attachments/841704583364608051/1063072047527366786/image.png" alt="Multiple requests"></p>
 <p>There is a massive performance optimization here. But I quite don't know how to achieve that. Welp, I guess I will eventually figure it out.</p>
+<h3>Rate limits</h3>
+<p>Since I don't wait between each request, some websites might enforce their rate-limiting policies on <code>walker</code>, and hence cause it to error out for URLs which are working perfectly fine. In these cases, if the API is returning semantic error codes, <code>walker</code> will display something like <code>429 Too Many Requests</code>.</p>
+<p><code>walker</code> has a timeout of 5 seconds between each request. If the URL does not return a response within 5 seconds, it will error out and show that the operation was timed out.</p>
 <h2>Examples</h2>
 <p>Examples of what the data would look like after the process is over can be found in the <a href="/data/">data</a> directory. All links in it are unique. However, the data simply only shows what links are <em>available</em> on the website, and not if they are valid or not. To see what links are functional, download the binary from <a href="/download/">download</a> and run it with a <code>--url</code> argument.</p>
 <h2>Usage</h2>
