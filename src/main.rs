@@ -1,18 +1,18 @@
 use std::collections::HashSet;
-use std::env;
-use std::fs::{create_dir, write};
-use std::path::PathBuf;
-use std::time::Instant;
+use std::time::{Duration, Instant};
 
 use futures::future::join_all;
-use reqwest::{Error, StatusCode, Url};
+
+use reqwest::{StatusCode, Url};
 
 use arboard::Clipboard;
 use colored::*;
 use std::net::ToSocketAddrs;
 
 use clap::Parser;
+use utils::{get_domain_name, is_valid_url, store_output};
 
+mod utils;
 mod walker;
 
 /// Tool to recursively analyze links from a website.
@@ -67,10 +67,29 @@ async fn main() {
 
     let sing = reqwest::Client::builder()
         .danger_accept_invalid_certs(true)
+        .timeout(Duration::from_secs(5))
         .build()
         .unwrap();
 
-    let statuses = check_status(
+    store_output(
+        links.urls.clone(),
+        args.remove_trailing_slashes(get_domain_name(args.url.to_string())),
+    )
+    .unwrap();
+
+    // let status_spawn = get_status(
+    //     sing,
+    //     links
+    //         .urls
+    //         .clone()
+    //         .into_iter()
+    //         .filter(|x| !x.starts_with("mailto"))
+    //         .collect(),
+    //     Some(cli_args.debug),
+    // )
+    // .await;
+
+    let status_futures = check_status(
         sing,
         links
             .urls
@@ -85,32 +104,29 @@ async fn main() {
     if links.urls.len() == 0 {
         eprintln!("It looks like the site is probably client-side rendered. In this case, something like puppeteer would be needed.")
     } else {
-        let cl = links.urls.clone();
-
-        let parsed_url = Url::parse(&args.url).unwrap();
-        let base_url = args.get_domain_name(parsed_url);
-
-        store_output(cl, args.remove_trailing_slashes(base_url)).unwrap();
-
         let now = Instant::now();
         println!("Received {} links. Iterating now...", links.urls.len());
         let mut response = String::new();
 
-        for href in statuses {
-            let (k, v) = match href {
+        for t in status_futures {
+            // let t = href.await.unwrap();
+
+            let (k, v) = match t {
                 Ok((url, status_code)) => {
-                    println!(
-                        "{}",
-                        format!("{}: {}", url, format!("{}", status_code).bright_green())
-                    );
+                    let code = if status_code.to_string() == "200 OK" {
+                        status_code.to_string().bright_green()
+                    } else {
+                        status_code.to_string().bright_red()
+                    };
+                    println!("{}", format!("{}: {}", url, format!("{}", code)));
 
                     (format!("{url}: "), format!("{status_code}"))
                 }
 
-                Err(e) => {
+                Err((k, e)) => {
                     println!(
                         "{}",
-                        format!("ERROR: {}", format!("{:#?}", e.to_string()).bright_red())
+                        format!("{}: {}", k, format!("{:#?}", e.to_string()).bright_red())
                     );
 
                     (format!("ERROR: "), format!("{:#?}", e.to_string()))
@@ -158,58 +174,11 @@ async fn main() {
     }
 }
 
-fn store_output(set: HashSet<String>, url: String) -> std::io::Result<String> {
-    let links = serde_json::to_string(&set)?;
-    let save_path = format!("/{}.json", url);
-
-    let current_dir = get_current_working_dir();
-    let working_dir = current_dir + "/data";
-
-    match create_dir(format!("{working_dir}")) {
-        Ok(n) => n,
-        Err(_e) => {
-            println!("Directory already exists. Writing to file now.");
-            let cl = working_dir.clone() + &save_path;
-            let links_cl = links.clone();
-
-            match write(cl.clone(), links_cl) {
-                Ok(n) => n,
-                Err(e) => println!("Some error occurred: {}", e),
-            }
-            return Ok(format!("Saved to {cl}"));
-        }
-    }
-
-    let cl = save_path.clone();
-
-    let readable_file_path = PathBuf::from(working_dir).join(save_path);
-    let rd_cl = readable_file_path.clone();
-    match write(readable_file_path, links) {
-        Ok(n) => n,
-        Err(e) => {
-            eprintln!("Tried to save at {:#?}", rd_cl);
-            eprintln!("{}", format!("Some error occurred: {}", e));
-        }
-    }
-
-    let success_message = format!("Saved to {}", cl);
-    println!("{}", success_message);
-    Ok(success_message)
-}
-
-fn get_current_working_dir() -> String {
-    let res = env::current_dir();
-    match res {
-        Ok(path) => path.into_os_string().into_string().unwrap(),
-        Err(_) => "FAILED".to_string(),
-    }
-}
-
 async fn check_status(
     client: reqwest::Client,
     urls: Vec<String>,
     debug: Option<bool>,
-) -> Vec<Result<(String, StatusCode), Error>> {
+) -> Vec<Result<(String, StatusCode), (String, String)>> {
     let correct = urls
         .clone()
         .into_iter()
@@ -233,34 +202,18 @@ async fn check_status(
             println!("Verifying {}", url.bright_yellow());
         }
         async move {
-            req.send().await.map(|response| {
-                let status = response.status();
-                let str_url = url.to_string();
+            let cl = url.clone();
+            match req.send().await {
+                Ok(resp) => {
+                    let status = resp.status();
 
-                return (str_url, status);
-            })
+                    Ok((cl, status))
+                }
+                Err(err) => Err((cl, err.to_string())),
+            }
         }
     });
     let results = join_all(futures).await;
 
     results
-}
-
-fn is_valid_url(url: String) -> bool {
-    url.starts_with("http") || url.starts_with("https")
-}
-
-pub fn base_url(mut url: Url) -> Result<String, String> {
-    match url.path_segments_mut() {
-        Ok(mut path) => {
-            path.clear();
-        }
-        Err(_) => {
-            return Err("Cannot base URL".to_string());
-        }
-    }
-
-    url.set_query(None);
-
-    Ok(url.to_string())
 }

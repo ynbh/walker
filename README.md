@@ -26,6 +26,12 @@ Also, for some reason, there are some duplicate requests happening even after I'
 
 There is a massive performance optimization here. But I quite don't know how to achieve that. Welp, I guess I will eventually figure it out.
 
+### Rate limits
+
+Since I don't wait between each request, some websites might enforce their rate-limiting policies on `walker`, and hence cause it to error out for URLs which are working perfectly fine. In these cases, if the API is returning semantic error codes, `walker` will display something like `429 Too Many Requests`.
+
+`walker` has a timeout of 5 seconds between each request. If the URL does not return a response within 5 seconds, it will error out and show that the operation was timed out.
+
 ## Examples
 
 Examples of what the data would look like after the process is over can be found in the [data](/data/) directory. All links in it are unique. However, the data simply only shows what links are _available_ on the website, and not if they are valid or not. To see what links are functional, download the binary from [download](/download/) and run it with a `--url` argument.

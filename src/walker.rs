@@ -106,14 +106,6 @@ impl Args {
 
         Ok(url)
     }
-
-    pub fn get_domain_name(&self, url: Url) -> String {
-        match url.domain() {
-            Some(n) => n.to_string(),
-            None => format!("Cannot resolve domain for {:#?}", url),
-        }
-    }
-
     pub async fn filter_a_tags(&self, url: String) -> Vec<String> {
         let mut v = vec![];
 
