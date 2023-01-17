@@ -4,5 +4,5 @@
  cargo build -r && 
  cp target/release/walker download/macOS/walker &&
  echo "Saved to download/macOS" &&
- gth --input "README.md" --output "index.html" -w -b && 
+ gth --input "README.md" --output "index.html" --title "Walker" -w -b && 
  commit -m "add"
