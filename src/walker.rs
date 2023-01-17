@@ -280,9 +280,13 @@ impl Args {
         urls
     }
 
+
+
+    
     fn insert(&mut self, value: String) {
         if value != "" {
             if !self.set.contains(&value) {
+                // why does this insert when the URL is already in the set?
                 self.set.insert(value.clone());
             }
         }
