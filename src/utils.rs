@@ -1,59 +1,43 @@
 use futures::StreamExt;
 use reqwest::{StatusCode, Url};
-use std::collections::HashSet;
-use std::env;
 use std::fs::{create_dir, write};
-use std::path::PathBuf;
 
 pub fn is_valid_url(url: String) -> bool {
     url.starts_with("http") || url.starts_with("https")
 }
 
-pub fn store_output(set: HashSet<String>, url: String) -> std::io::Result<String> {
-    let links = serde_json::to_string(&set)?;
-    let save_path = format!("/{}.json", url);
-
-    let current_dir = get_current_working_dir();
-    let working_dir = current_dir + "/data";
+pub fn save(str: String, url: String, key: &str) -> std::io::Result<()> {
+    let working_dir = format!("./data/{url}");
+    let save_path = format!("/{}-{key}.json", url);
 
     match create_dir(format!("{working_dir}")) {
-        Ok(n) => n,
+        Ok(_) => {
+            println!("Creating directory...");
+            let cl = working_dir.clone() + &save_path;
+            let links_cl = str.clone();
+
+            match write(cl.clone(), links_cl) {
+                Ok(_) => {
+                    println!("{}", format!("Saved {key} to {cl}"))
+                }
+                Err(e) => println!("Some error occurred: {}", e),
+            }
+        }
         Err(_e) => {
             println!("Directory already exists. Writing to file now.");
             let cl = working_dir.clone() + &save_path;
-            let links_cl = links.clone();
+            let links_cl = str.clone();
 
             match write(cl.clone(), links_cl) {
-                Ok(n) => n,
+                Ok(_) => {
+                    println!("{}", format!("Saved {key} to {cl}"))
+                }
                 Err(e) => println!("Some error occurred: {}", e),
             }
-            return Ok(format!("Saved to {cl}"));
         }
     }
 
-    let cl = save_path.clone();
-
-    let readable_file_path = PathBuf::from(working_dir).join(save_path);
-    let rd_cl = readable_file_path.clone();
-    match write(readable_file_path, links) {
-        Ok(n) => n,
-        Err(e) => {
-            eprintln!("Tried to save at {:#?}", rd_cl);
-            eprintln!("{}", format!("Some error occurred: {}", e));
-        }
-    }
-
-    let success_message = format!("Saved to {}", cl);
-    println!("{}", success_message);
-    Ok(success_message)
-}
-
-pub fn get_current_working_dir() -> String {
-    let res = env::current_dir();
-    match res {
-        Ok(path) => path.into_os_string().into_string().unwrap(),
-        Err(_) => "FAILED".to_string(),
-    }
+    Ok(())
 }
 
 pub fn get_domain_name(url: String) -> String {

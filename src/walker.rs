@@ -89,7 +89,7 @@ impl Args {
     }
 
     pub fn is_relative_url(&self, url: &String) -> bool {
-        url.starts_with("/")
+        url.starts_with("/") || url.starts_with(".")
     }
 
     pub fn base_url(&self, mut url: Url) -> Result<Url, &str> {
@@ -147,14 +147,9 @@ impl Args {
     pub fn get_effective_href(&self, href: String) -> String {
         let parsed = Url::parse(&self.url).unwrap();
 
-        let base_url = match self.base_url(parsed) {
-            Ok(n) => self.remove_trailing_slashes(n.to_string()),
-            Err(e) => format!("An error occurred: {}", e),
-        };
+        let resultant = parsed.join(&href).unwrap().to_string();
 
-        let relative_split = href.split(self.url.as_str()).collect::<Vec<&str>>()[0];
-
-        format!("{}{}", base_url, relative_split)
+        resultant
     }
 
     #[async_recursion]
@@ -176,16 +171,24 @@ impl Args {
             return urls;
         }
 
+
+        // Get all URLs from current URL
         let a_tags = self
             .filter_a_tags(self.remove_trailing_slashes(effective_url))
             .await;
 
         for href in a_tags {
+
+            // Is the URL relative?
             if self.is_relative_url(&href) {
-                let parent_url = self.remove_trailing_slashes(self.get_effective_href(href));
+
+                // prepend parent URl to the relative URL
+                let fixed = self.remove_trailing_slashes(self.get_effective_href(href));
                 if self.search_relative {
+
+                    // filter out the tags according to cache
                     let nested_a_tags = self
-                        .filter_a_tags(parent_url)
+                        .filter_a_tags(fixed)
                         .await
                         .into_iter()
                         .map(|x| {
@@ -200,13 +203,16 @@ impl Args {
                                 return "".to_string();
                             }
                         })
+                        .filter(|blank| blank != "")
                         .collect::<Vec<String>>();
 
+                    // again iterate over received URLs
                     for tag in nested_a_tags {
-                        // println!("diagnosis: 133 {}", tag);
                         let cl = tag.clone();
                         let cl2 = tag.clone();
                         urls.push(cl2);
+
+                        // check if relative since I already fixed them after mapping them while checking nested_a_tags
                         if tag.starts_with(&self.url) {
                             if !self.set.contains(&tag) {
                                 let a_tags = self.filter_a_tags(tag).await;
@@ -255,8 +261,8 @@ impl Args {
                         }
                     }
                 } else {
-                    let cl = parent_url.clone();
-                    urls.push(parent_url);
+                    let cl = fixed.clone();
+                    urls.push(fixed);
                     self.insert(cl);
                 }
             } else {

@@ -10,8 +10,10 @@ use colored::*;
 use std::net::ToSocketAddrs;
 
 use clap::Parser;
-use utils::{get_domain_name, is_valid_url, store_output};
+use parse::parse;
+use utils::{get_domain_name, is_valid_url, save};
 
+mod parse;
 mod utils;
 mod walker;
 
@@ -51,8 +53,8 @@ async fn main() {
         set: HashSet::new(),
     };
     if cli_args.singular {
-        let parsed = Url::parse(&args.url).unwrap();
-        let base_url = args.base_url(parsed).unwrap().to_string();
+        let parsed_response = Url::parse(&args.url).unwrap();
+        let base_url = args.base_url(parsed_response).unwrap().to_string();
         let domain: String = args.remove_trailing_slashes(
             base_url.split("//").into_iter().collect::<Vec<&str>>()[1].to_string(),
         );
@@ -70,26 +72,16 @@ async fn main() {
         .timeout(Duration::from_secs(5))
         .build()
         .unwrap();
+    let file_path = args.remove_trailing_slashes(get_domain_name(args.url.to_string()));
 
-    store_output(
-        links.urls.clone(),
-        args.remove_trailing_slashes(get_domain_name(args.url.to_string())),
+    save(
+        serde_json::to_string_pretty(&links.urls).unwrap(),
+        file_path.clone(),
+        "links"
     )
     .unwrap();
 
-    // let status_spawn = get_status(
-    //     sing,
-    //     links
-    //         .urls
-    //         .clone()
-    //         .into_iter()
-    //         .filter(|x| !x.starts_with("mailto"))
-    //         .collect(),
-    //     Some(cli_args.debug),
-    // )
-    // .await;
-
-    let status_futures = check_status(
+    let status_vec = check_status(
         sing,
         links
             .urls
@@ -108,9 +100,7 @@ async fn main() {
         println!("Received {} links. Iterating now...", links.urls.len());
         let mut response = String::new();
 
-        for t in status_futures {
-            // let t = href.await.unwrap();
-
+        for t in status_vec {
             let (k, v) = match t {
                 Ok((url, status_code)) => {
                     let code = if status_code.to_string() == "200 OK" {
@@ -159,9 +149,14 @@ async fn main() {
         );
         println!("{}", message);
 
+        let parsed_response = parse(response.clone());
+
+
+        save(parsed_response.clone(), file_path, "status").unwrap();
+
         if cli_args.construct {
-            match clipboard.set_text(response) {
-                Ok(_) => println!("Copied response to clipboard."),
+            match clipboard.set_text(parsed_response) {
+                Ok(_) => println!("Copied JSON response to clipboard."),
                 Err(e) => eprintln!(
                     "{}",
                     format!(
