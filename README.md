@@ -4,6 +4,14 @@ Walker is a tool that performs a recursive analysis of a website, including all 
 
 It is worth noting that this process may take an indeterminate amount of time, as a website may contain an infinite number of nested links. A potential future update to the recursive function could be the addition of a `depth` parameter, which would restrict recursion to only a specified number of levels. I don't plan on implementing this any time soon, though!
 
+Also, `walker` is fast as fuck. After it recursively acquires all the URLs in a website, it quickly(say, 0 seconds) performs status check for all of them concurrently. For example, it verified all the links(2026) on [Next](https://nextjs.org)'s website in 65 seconds:
+
+```txt
+Stats
+Time to get all links: 65 seconds
+Time to verify links: 0 seconds
+```
+
 ## Quirks
 
 ### Client side rendering
