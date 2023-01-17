@@ -16,11 +16,9 @@ There could be cases where some parts of the website are server-rendered, while 
 
 I could perhaps use something like headless chrome to get the HTML for these pages, but that only adds overhead to problem I was initially trying to solve. I am not keen on making headless chrome work in Rust. That task sounds like a better job for TypeScript.
 
-### URLs
+### Duplicate Requests
 
-URLs are shitty. Essentially, I eventually want to be able to discern between URLs like: https://example.com#id and https://example.com/#id. In the former case, https://example.com has already been verified to be have not broken, and hence, verifying https://example.com#id would be redundant, since it is not really a new URL. It's just a section within the page.
-
-Also, for some reason, there are some duplicate requests happening even after I've made sure to memoize the URLs in a `HashSet`. I am not sure _why_ that happens, but it feels like a rust-specific quirk, since the same script works perfectly, albeit slow, in TypeScript. For example:
+For some reason, `walker` keeps sending duplicate requests. That is, URLs that have been cached keep getting requests <4 times. I am not sure _why_ this happens, but it feels like a rust-specific quirk, since the same script works perfectly fine in TypeScript. See:
 
 ![Multiple requests](https://media.discordapp.net/attachments/841704583364608051/1063072047527366786/image.png)
 

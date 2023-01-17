@@ -107,6 +107,8 @@ impl Args {
         Ok(url)
     }
     pub async fn filter_a_tags(&self, url: String) -> Vec<String> {
+
+        let url = self.remove_fragment(url);
         let mut v = vec![];
 
         if self.set.contains(&url) {
@@ -144,8 +146,19 @@ impl Args {
         }
         url
     }
+
+    pub fn remove_fragment(&self, url: String) -> String {
+        let mut parsed = Url::parse(&url).unwrap();
+
+        parsed.set_fragment(None);
+
+        parsed.to_string()
+    }
+
     pub fn get_effective_href(&self, href: String) -> String {
-        let parsed = Url::parse(&self.url).unwrap();
+        let mut parsed = Url::parse(&self.url).unwrap();
+
+        parsed.set_fragment(None);
 
         let resultant = parsed.join(&href).unwrap().to_string();
 
@@ -171,21 +184,17 @@ impl Args {
             return urls;
         }
 
-
         // Get all URLs from current URL
         let a_tags = self
             .filter_a_tags(self.remove_trailing_slashes(effective_url))
             .await;
 
         for href in a_tags {
-
             // Is the URL relative?
             if self.is_relative_url(&href) {
-
                 // prepend parent URl to the relative URL
-                let fixed = self.remove_trailing_slashes(self.get_effective_href(href));
+                let fixed = self.get_effective_href(href);
                 if self.search_relative {
-
                     // filter out the tags according to cache
                     let nested_a_tags = self
                         .filter_a_tags(fixed)
@@ -193,9 +202,9 @@ impl Args {
                         .into_iter()
                         .map(|x| {
                             let curr = if self.is_relative_url(&x) {
-                                self.remove_trailing_slashes(self.get_effective_href(x))
+                                self.get_effective_href(x)
                             } else {
-                                x
+                                self.remove_fragment(x)
                             };
                             if !self.set.contains(&curr) {
                                 return curr;
@@ -203,7 +212,7 @@ impl Args {
                                 return "".to_string();
                             }
                         })
-                        .filter(|blank| blank != "")
+                        .filter(|blank| blank != "") // apparently pre-filtering out cached URLs stops making this work?
                         .collect::<Vec<String>>();
 
                     // again iterate over received URLs
@@ -221,9 +230,8 @@ impl Args {
 
                                 for href in &a_tags {
                                     if self.is_relative_url(&href) {
-                                        let fixed = self.remove_trailing_slashes(
-                                            self.get_effective_href(href.to_string()),
-                                        );
+                                        let fixed = self.get_effective_href(href.to_string());
+                                 
                                         let cl = fixed.clone();
                                         let cl2 = fixed.clone();
                                         urls.push(cl);
@@ -245,8 +253,9 @@ impl Args {
                                             self.insert(cl2);
                                         }
                                     } else {
-                                        let fixed =
-                                            self.remove_trailing_slashes((&href).to_string());
+                                        let fixed = self.remove_fragment(
+                                            (&href).to_string()
+                                        );
                                         let fixed_cl = fixed.clone();
                                         urls.push(fixed);
                                         self.insert(fixed_cl);
@@ -267,7 +276,7 @@ impl Args {
                 }
             } else {
                 let cl = href.clone();
-                let fixed = self.remove_trailing_slashes(cl);
+                let fixed = self.remove_fragment(cl);
 
                 let cl_fixed = fixed.clone();
                 urls.push(cl_fixed);
@@ -280,9 +289,6 @@ impl Args {
         urls
     }
 
-
-
-    
     fn insert(&mut self, value: String) {
         if value != "" {
             if !self.set.contains(&value) {
