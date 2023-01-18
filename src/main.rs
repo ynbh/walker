@@ -91,7 +91,8 @@ async fn main() {
             .urls
             .clone()
             .into_iter()
-            .filter(|x| !x.starts_with("mailto"))
+			// Filter out mailto and file:// URLs
+            .filter(|x| !x.starts_with("mailto") || !x.starts_with("file:"))
             .collect(),
         Some(cli_args.debug),
     )
