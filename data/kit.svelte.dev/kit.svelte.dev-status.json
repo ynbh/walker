@@ -1,38 +1,10 @@
 [
   {
-    "url": "https://github.com/sveltejs/vite-plugin-svelte/blob/main/docs/faq.md",
+    "url": "https://developer.mozilla.org/en-US/docs/Web/API",
     "status": "200 OK"
   },
   {
-    "url": "https://kit.svelte.dev/docs/cli",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://github.com/sveltejs/kit/edit/master/documentation/docs/20-core-concepts/20-load.md",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://github.com/sveltejs/vite-plugin-svelte",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://github.com/yarnpkg/berry/pull/2161",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://kit.svelte.dev/docs/modules",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://github.com/sveltejs/kit/edit/master/documentation/docs/30-advanced/60-assets.md",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://github.com/sveltejs/kit/edit/master/documentation/docs/10-getting-started/40-web-standards.md",
+    "url": "https://publint.dev/",
     "status": "200 OK"
   },
   {
@@ -40,63 +12,7 @@
     "status": "200 OK"
   },
   {
-    "url": "https://vitejs.dev/guide/assets.html",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://pudding.cool/",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://github.com/MikeBild/sveltekit-adapter-aws",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://kit.svelte.dev/docs/form-actions",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://github.com/sveltejs/kit/edit/master/documentation/docs/40-best-practices/20-seo.md",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://monogram.io/",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/lang",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://yarnpkg.com/configuration/yarnrc",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://github.com/sveltejs/kit/edit/master/documentation/docs/20-core-concepts/10-routing.md",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://github.com/sveltejs/kit/edit/master/documentation/docs/30-advanced/20-hooks.md",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://kit.svelte.dev/docs/assets",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://github.com/microsoft/TypeScript/issues/13399",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Status",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://kit.svelte.dev/docs/web-standards",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://github.com/sveltejs/kit",
+    "url": "https://github.com/sveltejs/kit/edit/master/documentation/docs/60-appendix/30-glossary.md",
     "status": "200 OK"
   },
   {
@@ -104,247 +20,7 @@
     "status": "200 OK"
   },
   {
-    "url": "https://github.com/sveltejs/kit/edit/master/documentation/docs/30-advanced/70-packaging.md",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://kit.svelte.dev/docs/service-workers",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/ARIA_Live_Regions",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://developer.mozilla.org/en-US/docs/Web/API/Web_Crypto_API",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://vitejs.dev/config/server-options.html",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://github.com/topics/sveltekit-template",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://github.com/vitejs/vite/issues",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://kit.svelte.dev/docs/introduction",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://github.com/sveltejs/kit/edit/master/documentation/docs/60-appendix/20-additional-resources.md",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://github.com/sveltejs/svelte-preprocess/blob/main/docs/getting-started.md",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://github.com/sveltejs/kit/edit/master/documentation/docs/60-appendix/30-glossary.md",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://developer.mozilla.org/en-US/docs/Web/API/WritableStream",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://github.com/sveltejs/kit/edit/master/documentation/docs/30-advanced/30-link-options.md",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://github.com/sveltejs/sites/tree/master/sites/svelte.dev",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://kit.svelte.dev/docs/link-options",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://vitejs.dev/config",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://www.pausly.app/",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://developer.mozilla.org/en-US/docs/Web/API/Request",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://kit.svelte.dev/faq",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://svelte.dev/",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://web.dev/vitals",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://kit.svelte.dev/docs",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://github.com/yarnpkg/berry/issues/638",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://github.com/topics/sveltekit",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://vitejs.dev/guide/features.html",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://code.visualstudio.com/download",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://github.com/sveltejs/kit/edit/master/documentation/docs/50-reference/40-types.md",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://github.com/sveltejs/kit/tree/master/packages/adapter-netlify",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://vitejs.dev/",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://svelte.dev/faq",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://kit.svelte.dev/docs/seo",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://vitejs.dev/guide/env-and-mode.html",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://kit.svelte.dev/docs/types",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://github.com/rich-harris/devalue",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://github.com/sveltejs/svelte-hmr",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://unicodebook.readthedocs.io/unicode_encodings.html",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://stackoverflow.com/questions/tagged/sveltekit",
-    "status": "403 Forbidden"
-  },
-  {
-    "url": "https://github.com/bluwy/vite-plugin-iso-import",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://web.dev/es-modules-in-sw",
-    "status": "200 OK"
-  },
-  {
-    "url": "ERROR",
-    "status": "\"error sending request for url (http://localhost:5173/)"
-  },
-  {
-    "url": "https://www.a11yproject.com/",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://sveltesociety.dev/tools",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://github.com/sveltejs/kit/edit/master/documentation/docs/20-core-concepts/30-form-actions.md",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://www.pronauns.com/",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/autofocus",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://github.com/pluvial/svelte-adapter-deno",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://svelte.dev/blog/whats-the-deal-with-sveltekit",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://github.com/sveltejs/kit/edit/master/documentation/docs/10-getting-started/20-creating-a-project.md",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://kit.svelte.dev/docs/hooks",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://github.com/sveltejs/kit/edit/master/documentation/docs/30-advanced/10-advanced-routing.md",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://sveltekit.new/",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://kit.svelte.dev/docs/glossary",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://github.com/sveltejs/kit/edit/master/documentation/docs/50-reference/10-configuration.md",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://developer.mozilla.org/en-US/docs/Web/API/FormData",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API/Using_Service_Workers",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://github.com/settings",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://github.com/sveltejs/sites/tree/master/sites/hn.svelte.dev",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://github.com/sveltejs/vite-plugin-svelte/blob/main/docs/config.md",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://developers.google.com/web/tools/lighthouse",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://web.dev/first-contentful-paint",
+    "url": "https://svelte.dev/chat",
     "status": "200 OK"
   },
   {
@@ -352,123 +28,15 @@
     "status": "200 OK"
   },
   {
-    "url": "https://2021.stateofjs.com/en-US/libraries/front-end-frameworks",
+    "url": "https://www.typescriptlang.org/tsconfig",
     "status": "200 OK"
   },
   {
-    "url": "https://kit.svelte.dev/",
+    "url": "https://github.com/sveltejs/kit/edit/master/documentation/docs/40-best-practices/20-seo.md",
     "status": "200 OK"
   },
   {
-    "url": "https://asm-editor.specy.app/",
-    "status": "200 OK"
-  },
-  {
-    "url": "ERROR",
-    "status": "\"error sending request for url (http://localhost/)"
-  },
-  {
-    "url": "https://learn.svelte.dev/",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://github.com/sveltejs/vite-plugin-svelte/blob/main/docs/preprocess.md",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://pocketbase.io/",
-    "status": "405 Method Not Allowed"
-  },
-  {
-    "url": "https://vitest.dev/",
-    "status": "200 OK"
-  },
-  {
-    "url": "ERROR",
-    "status": "\"error sending request for url (https://blog.sindresorhus.com/get-ready-for-esm-aa53530b3f77)"
-  },
-  {
-    "url": "https://github.com/sveltejs/kit/edit/master/documentation/docs/40-best-practices/10-accessibility.md",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://kit.svelte.dev/docs/additional-resources",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://kit.svelte.dev/docs/project-structure",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://kit.svelte.dev/docs/load",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://nodejs.org/api/packages.html",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://github.com/sveltejs/kit/edit/master/documentation/docs/50-reference/20-cli.md",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://github.com/sveltejs/kit/edit/master/documentation/docs/60-appendix/05-integrations.md",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://tsh.io/state-of-frontend",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://developer.mozilla.org/en-US/docs/Web/API/TransformStream",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://vercel.com/templates/svelte/sveltekit-boilerplate",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://owasp.org/www-community/attacks/csrf",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://developer.mozilla.org/en-US/docs/Web/API/Headers",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://developer.mozilla.org/en-US/docs/Web/API/Streams_API",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://github.com/sveltejs/kit/issues/2920",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://kit.svelte.dev/docs/advanced-routing",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://sveltesociety.dev/",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://github.com/sveltejs/kit/tree/master/sites/kit.svelte.dev",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://kit.svelte.dev/docs/adapters",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://github.com/sveltejs/realworld",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://github.com/sveltejs/kit/edit/master/documentation/docs/30-advanced/25-errors.md",
+    "url": "https://developer.mozilla.org/en-US/docs/Web/API/URL",
     "status": "200 OK"
   },
   {
@@ -476,39 +44,19 @@
     "status": "200 OK"
   },
   {
-    "url": "https://pnpm.io/",
+    "url": "https://kit.svelte.dev/docs/migrating",
     "status": "200 OK"
   },
   {
-    "url": "https://kit.svelte.dev/docs/packaging",
+    "url": "https://vercel.com/templates/svelte/sveltekit-boilerplate",
     "status": "200 OK"
   },
   {
-    "url": "https://developer.mozilla.org/en-US/docs/Web/API",
+    "url": "https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API/Using_Service_Workers",
     "status": "200 OK"
   },
   {
-    "url": "https://github.com/sveltejs/kit/edit/master/documentation/docs/30-advanced/40-service-workers.md",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://raster.app/",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://kit.svelte.dev/docs/creating-a-project",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://playwright.dev/",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://vite-pwa-org.netlify.app/frameworks/sveltekit.html",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://kit.svelte.dev/docs/server-only-modules",
+    "url": "https://developer.mozilla.org/en-US/docs/Web/API/Headers",
     "status": "200 OK"
   },
   {
@@ -516,63 +64,147 @@
     "status": "200 OK"
   },
   {
-    "url": "https://kit.svelte.dev/docs/routing",
+    "url": "https://kit.svelte.dev/docs/service-workers",
     "status": "200 OK"
   },
   {
-    "url": "https://vitejs.dev/guide/api-plugin.html",
+    "url": "https://developer.mozilla.org/en-US/docs/Web/API/FormData",
     "status": "200 OK"
   },
   {
-    "url": "https://github.com/sveltejs/kit/edit/master/documentation/docs/10-getting-started/30-project-structure.md",
+    "url": "https://stackoverflow.com/questions/tagged/sveltekit",
+    "status": "403 Forbidden"
+  },
+  {
+    "url": "https://github.com/sveltejs/kit/edit/master/documentation/docs/20-core-concepts/20-load.md",
     "status": "200 OK"
   },
   {
-    "url": "https://web.dev/learn/pwa/workbox",
+    "url": "https://github.com/bluwy/svelte-preprocess-import-assets",
     "status": "200 OK"
   },
   {
-    "url": "https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode",
-    "status": "404 Not Found"
-  },
-  {
-    "url": "https://github.com/sveltejs/svelte-preprocess/blob/main/docs/usage.md",
+    "url": "https://kit.svelte.dev/docs/packaging",
     "status": "200 OK"
   },
   {
-    "url": "https://twitter.com/Rich_Harris/status/1589675637195042817",
+    "url": "https://github.com/sveltejs/sites/tree/master/sites/svelte.dev",
     "status": "200 OK"
   },
   {
-    "url": "https://developers.google.com/search/docs/advanced/structured-data/intro-structured-data",
+    "url": "https://svelte.dev/",
     "status": "200 OK"
   },
   {
-    "url": "https://github.com/sveltejs/kit/tree/master/packages/adapter-cloudflare",
+    "url": "https://unicodebook.readthedocs.io/unicode_encodings.html",
     "status": "200 OK"
   },
   {
-    "url": "https://github.com/sveltejs/kit/edit/master/documentation/docs/10-getting-started/10-introduction.md",
+    "url": "https://github.com/sveltejs/kit/edit/master/documentation/docs/60-appendix/05-integrations.md",
     "status": "200 OK"
   },
   {
-    "url": "https://github.com/jshttp/cookie",
+    "url": "https://web.dev/vitals",
     "status": "200 OK"
   },
   {
-    "url": "https://github.com/jthegedus/svelte-adapter-firebase",
+    "url": "https://kit.svelte.dev/docs/hooks",
     "status": "200 OK"
   },
   {
-    "url": "https://github.com/sveltejs/svelte-preprocess/issues/305",
+    "url": "https://developer.mozilla.org/en-US/docs/Glossary/percent-encoding",
     "status": "200 OK"
   },
   {
-    "url": "https://www.typescriptlang.org/tsconfig",
+    "url": "https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/autofocus",
     "status": "200 OK"
   },
   {
-    "url": "https://amp.dev/",
+    "url": "https://nodejs.org/api/packages.html",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://github.com/sveltejs/kit/edit/master/documentation/docs/10-getting-started/40-web-standards.md",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://www.rfc-editor.org/rfc/rfc3986.html",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://vitejs.dev/guide/features.html",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://sveltesociety.dev/",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://github.com/microsoft/TypeScript/issues/13399",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://kit.svelte.dev/docs/modules",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://vitejs.dev/",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://github.com/sveltejs/kit/edit/master/documentation/docs/10-getting-started/20-creating-a-project.md",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://github.com/JonasKruckenberg/imagetools",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://yarnpkg.com/configuration/yarnrc",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://developer.mozilla.org/en-US/docs/Web/API/Request",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://github.com/sveltejs/kit/edit/master/documentation/docs/30-advanced/70-packaging.md",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Status",
+    "status": "200 OK"
+  },
+  {
+    "url": "ERROR",
+    "status": "\"error sending request for url (https://blog.sindresorhus.com/get-ready-for-esm-aa53530b3f77)"
+  },
+  {
+    "url": "https://kit.svelte.dev/faq",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://github.com/rich-harris/devalue",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://www.offerzen.com/community/svelte-origins-documentary",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://kit.svelte.dev/docs/integrations",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://github.com/sveltejs/sites/tree/master/sites/hn.svelte.dev",
     "status": "200 OK"
   },
   {
@@ -584,63 +216,7 @@
     "status": "200 OK"
   },
   {
-    "url": "https://kit.svelte.dev/docs/errors",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://vitejs.dev/config/shared-options.html",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://svelte.dev/tutorial/transition",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://github.com/bluwy/svelte-preprocess-import-assets",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://github.com/sveltejs/svelte-preprocess",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://github.com/sveltejs/kit/tree/master/packages/adapter-node",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://www.w3.org/WAI/WCAG21/quickref",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://pagespeed.web.dev/",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://developer.mozilla.org/en-US/docs/Web/API/URL",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://svelte.dev/docs",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://developer.mozilla.org/en-US/docs/Glossary/percent-encoding",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://developer.mozilla.org/en-US/docs/Web/API/ReadableStream",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://www.rfc-editor.org/rfc/rfc3986.html",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://github.com/sveltejs/sites",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://kit.svelte.dev/docs/migrating",
+    "url": "https://developer.mozilla.org/en-US/docs/Web/API/NetworkInformation/saveData",
     "status": "200 OK"
   },
   {
@@ -648,31 +224,31 @@
     "status": "200 OK"
   },
   {
-    "url": "https://developer.mozilla.org/en-US/docs/Learn/Accessibility",
+    "url": "https://github.com/sveltejs/svelte-preprocess/blob/main/docs/usage.md",
     "status": "200 OK"
   },
   {
-    "url": "https://en.wikipedia.org/wiki/Well-known_URI",
+    "url": "https://pudding.cool/",
     "status": "200 OK"
   },
   {
-    "url": "https://sveltesociety.dev/templates",
+    "url": "https://github.com/topics/sveltekit",
     "status": "200 OK"
   },
   {
-    "url": "https://kit.svelte.dev/docs/accessibility",
+    "url": "https://github.com/jshttp/cookie",
     "status": "200 OK"
   },
   {
-    "url": "https://developers.google.com/search/docs/advanced/javascript/dynamic-rendering",
+    "url": "https://pnpm.io/",
     "status": "200 OK"
   },
   {
-    "url": "https://publint.dev/",
+    "url": "https://github.com/sveltejs/vite-plugin-svelte/blob/main/docs/faq.md",
     "status": "200 OK"
   },
   {
-    "url": "https://tradingstrategy.ai/",
+    "url": "https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/ARIA_Live_Regions",
     "status": "200 OK"
   },
   {
@@ -680,27 +256,207 @@
     "status": "200 OK"
   },
   {
-    "url": "https://github.com/sveltejs/kit/issues",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://kit.svelte.dev/docs/integrations",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://svelte.dev/chat",
-    "status": "200 OK"
-  },
-  {
-    "url": "https://www.offerzen.com/community/svelte-origins-documentary",
-    "status": "200 OK"
-  },
-  {
     "url": "https://github.com/geoffrich/svelte-adapter-azure-swa",
     "status": "200 OK"
   },
   {
-    "url": "https://developer.mozilla.org/en-US/docs/Web/API/NetworkInformation/saveData",
+    "url": "https://svelte.dev/faq",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://pagespeed.web.dev/",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://github.com/sveltejs/kit/edit/master/documentation/docs/10-getting-started/10-introduction.md",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://web.dev/es-modules-in-sw",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://kit.svelte.dev/docs/creating-a-project",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://kit.svelte.dev/docs/types",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://github.com/sveltejs/kit/edit/master/documentation/docs/60-appendix/20-additional-resources.md",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://vitest.dev/",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://github.com/sveltejs/kit/edit/master/documentation/docs/30-advanced/40-service-workers.md",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://owasp.org/www-community/attacks/csrf",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://2021.stateofjs.com/en-US/libraries/front-end-frameworks",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://tradingstrategy.ai/",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://github.com/MikeBild/sveltekit-adapter-aws",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://kit.svelte.dev/docs/server-only-modules",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://github.com/pluvial/svelte-adapter-deno",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://github.com/sveltejs/kit/edit/master/documentation/docs/10-getting-started/30-project-structure.md",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://github.com/sveltejs/svelte-preprocess/blob/main/docs/getting-started.md",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://web.dev/first-contentful-paint",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://twitter.com/Rich_Harris/status/1589675637195042817",
+    "status": "200 OK"
+  },
+  {
+    "url": "ERROR",
+    "status": "\"error sending request for url (http://localhost:5173/)"
+  },
+  {
+    "url": "https://github.com/sveltejs/kit/tree/master/packages/adapter-cloudflare",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://github.com/sveltejs/kit/edit/master/documentation/docs/30-advanced/60-assets.md",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://developers.google.com/web/tools/lighthouse",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://asm-editor.specy.app/",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://github.com/yarnpkg/berry/pull/2161",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://kit.svelte.dev/docs/seo",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://www.a11yproject.com/",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://vitejs.dev/config",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://www.w3.org/WAI/WCAG21/quickref",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://github.com/sveltejs/kit/edit/master/documentation/docs/30-advanced/10-advanced-routing.md",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://kit.svelte.dev/docs/errors",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://github.com/sveltejs/vite-plugin-svelte",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://kit.svelte.dev/docs/accessibility",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://developer.mozilla.org/en-US/docs/Web/API/Streams_API",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://www.pausly.app/",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://github.com/sveltejs/svelte-preprocess",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://github.com/sveltejs/svelte-hmr",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://code.visualstudio.com/download",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://github.com/sveltejs/kit/edit/master/documentation/docs/40-best-practices/10-accessibility.md",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://kit.svelte.dev/docs/advanced-routing",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://github.com/settings",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://github.com/sveltejs/kit/edit/master/documentation/docs/30-advanced/20-hooks.md",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://github.com/sveltejs/kit/edit/master/documentation/docs/20-core-concepts/10-routing.md",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://developer.mozilla.org/en-US/docs/Web/API/TransformStream",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://web.dev/learn/pwa/workbox",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://github.com/bluwy/vite-plugin-iso-import",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://pocketbase.io/",
+    "status": "405 Method Not Allowed"
+  },
+  {
+    "url": "https://vitejs.dev/guide/assets.html",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://amp.dev/",
     "status": "200 OK"
   },
   {
@@ -708,15 +464,103 @@
     "status": "200 OK"
   },
   {
+    "url": "https://tsh.io/state-of-frontend",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://kit.svelte.dev/docs/additional-resources",
+    "status": "200 OK"
+  },
+  {
     "url": "https://insights.stackoverflow.com/survey/2021",
     "status": "403 Forbidden"
   },
   {
-    "url": "https://github.com/JonasKruckenberg/imagetools",
+    "url": "https://vitejs.dev/config/server-options.html",
     "status": "200 OK"
   },
   {
-    "url": "https://svelte.dev/tutorial",
+    "url": "https://kit.svelte.dev/docs/routing",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://monogram.io/",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://sveltesociety.dev/templates",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://github.com/sveltejs/kit/edit/master/documentation/docs/50-reference/20-cli.md",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://svelte.dev/docs",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://kit.svelte.dev/docs",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://kit.svelte.dev/docs/assets",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://kit.svelte.dev/docs/project-structure",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://github.com/sveltejs/kit/edit/master/documentation/docs/30-advanced/25-errors.md",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://github.com/sveltejs/kit/edit/master/documentation/docs/30-advanced/30-link-options.md",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://github.com/sveltejs/kit/tree/master/sites/kit.svelte.dev",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://github.com/yarnpkg/berry/issues/638",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://github.com/sveltejs/realworld",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://github.com/sveltejs/vite-plugin-svelte/blob/main/docs/preprocess.md",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://github.com/sveltejs/kit",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://github.com/sveltejs/kit/tree/master/packages/adapter-node",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://developers.google.com/search/docs/advanced/javascript/dynamic-rendering",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://github.com/topics/sveltekit-template",
+    "status": "200 OK"
+  },
+  {
+    "url": "ERROR",
+    "status": "\"error sending request for url (http://localhost/)"
+  },
+  {
+    "url": "https://learn.svelte.dev/",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://www.pronauns.com/",
     "status": "200 OK"
   },
   {
@@ -724,7 +568,163 @@
     "status": "200 OK"
   },
   {
+    "url": "https://github.com/sveltejs/kit/edit/master/documentation/docs/50-reference/10-configuration.md",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://kit.svelte.dev/docs/cli",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://github.com/sveltejs/kit/tree/master/packages/adapter-netlify",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://playwright.dev/",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://svelte.dev/tutorial/transition",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://sveltesociety.dev/tools",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/lang",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://vitejs.dev/config/shared-options.html",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://kit.svelte.dev/docs/form-actions",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://github.com/jthegedus/svelte-adapter-firebase",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://github.com/sveltejs/kit/edit/master/documentation/docs/50-reference/40-types.md",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://developer.mozilla.org/en-US/docs/Web/API/WritableStream",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://github.com/sveltejs/kit/issues",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://svelte.dev/tutorial",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://github.com/sveltejs/kit/edit/master/documentation/docs/20-core-concepts/30-form-actions.md",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://github.com/sveltejs/svelte-preprocess/issues/305",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://developer.mozilla.org/en-US/docs/Web/API/Web_Crypto_API",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://vite-pwa-org.netlify.app/frameworks/sveltekit.html",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://kit.svelte.dev/docs/link-options",
+    "status": "200 OK"
+  },
+  {
     "url": "https://github.com/sveltejs/kit/edit/master/documentation/docs/60-appendix/10-migrating.md",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://kit.svelte.dev/docs/introduction",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://kit.svelte.dev/docs/load",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://kit.svelte.dev/docs/glossary",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://github.com/sveltejs/sites",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://kit.svelte.dev/",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://github.com/vitejs/vite/issues",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://developer.mozilla.org/en-US/docs/Learn/Accessibility",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode",
+    "status": "404 Not Found"
+  },
+  {
+    "url": "https://svelte.dev/blog/whats-the-deal-with-sveltekit",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://kit.svelte.dev/docs/web-standards",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://raster.app/",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://github.com/sveltejs/vite-plugin-svelte/blob/main/docs/config.md",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://sveltekit.new/",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://en.wikipedia.org/wiki/Well-known_URI",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://developer.mozilla.org/en-US/docs/Web/API/ReadableStream",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://developers.google.com/search/docs/advanced/structured-data/intro-structured-data",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://kit.svelte.dev/docs/adapters",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://github.com/sveltejs/kit/issues/2920",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://vitejs.dev/guide/env-and-mode.html",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://vitejs.dev/guide/api-plugin.html",
     "status": "200 OK"
   }
 ]

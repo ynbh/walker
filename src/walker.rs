@@ -22,7 +22,7 @@ pub struct URLs {
 }
 
 impl URLs {
-    fn push(&mut self, value: String) {
+    fn push_and_remove_trailing_slashes(&mut self, value: String) {
         if value != "" {
             if !self.urls.contains(&value) {
                 self.urls.insert(self.remove_trailing_slashes(value));
@@ -39,15 +39,21 @@ impl URLs {
 }
 
 impl Args {
-    pub async fn get(&self, url: String, debug: Option<bool>) -> Result<reqwest::Response, String> {
-        if debug.unwrap_or(false) {
-            println!("{}", format!("[DEBUG] Fetching {url}").bright_purple())
-        }
+    pub async fn get(
+        &mut self,
+        url: String,
+        debug: Option<bool>,
+    ) -> Result<reqwest::Response, String> {
+        // println!("At {} - Set State: {:#?}", url, self.set);
 
         if self.set.contains(&url) {
-            if self.set.contains(&url) {
-                return Err("URL already visited".to_string());
-            }
+            return Err("URL already visited".to_string());
+        }
+
+        self.insert(url.clone());
+
+        if debug.unwrap_or(false) {
+            println!("{}", format!("[DEBUG] Fetching {url}").bright_purple())
         }
 
         return match self
@@ -62,7 +68,7 @@ impl Args {
         };
     }
 
-    pub async fn _is_broken(&self, url: String) -> String {
+    pub async fn _is_broken(&mut self, url: String) -> String {
         let status = match self.get(url, None).await {
             Ok(n) => n.status().to_string(),
             Err(_) => "URL Error".to_string(),
@@ -71,13 +77,13 @@ impl Args {
         status
     }
 
-    pub async fn get_html(&self, url: String) -> Result<String, Box<dyn std::error::Error>> {
+    pub async fn get_html(&mut self, url: String) -> Result<String, Box<dyn std::error::Error>> {
         let res = self.get(url, Some(self.debug)).await?.text().await?;
 
         Ok(res)
     }
 
-    pub async fn parse_html(&self, nested_url: String) -> Html {
+    pub async fn parse_html(&mut self, nested_url: String) -> Html {
         let html = self.get_html(nested_url).await.unwrap();
         let document = Html::parse_document(html.as_str());
 
@@ -92,7 +98,7 @@ impl Args {
         url.starts_with("/") || url.starts_with(".")
     }
 
-    pub fn base_url(&self, mut url: Url) -> Result<Url, &str> {
+    pub fn _base_url(&self, mut url: Url) -> Result<Url, &str> {
         match url.path_segments_mut() {
             Ok(mut path) => {
                 path.clear();
@@ -106,8 +112,9 @@ impl Args {
 
         Ok(url)
     }
-    pub async fn filter_a_tags(&self, url: String) -> Vec<String> {
+    pub async fn filter_a_tags(&mut self, url: String) -> Vec<String> {
         let url = self.remove_fragment(url);
+
         let mut v = vec![];
 
         if self.set.contains(&url) {
@@ -165,6 +172,99 @@ impl Args {
     }
 
     #[async_recursion]
+    pub async fn _shitty_walk(&mut self, url: Option<String>) -> URLs {
+        let effective_url = match url {
+            Some(k) => k,
+            None => {
+                let cloned_url = &self.url;
+
+                cloned_url.to_string()
+            }
+        };
+
+        let mut urls = URLs {
+            urls: HashSet::new(),
+        };
+
+        if self.set.contains(&effective_url) {
+            return urls;
+        }
+
+        // Get all URLs from current URL
+        let anchors = self
+            .filter_a_tags(self.remove_trailing_slashes(effective_url))
+            .await;
+
+        for href in anchors {
+            // Is the URL relative?
+            if self.is_relative_url(&href) {
+                // prepend parent URl to the relative URL
+                // /docs -> https://parent-url/docs
+                let fixed = self.get_effective_href(href);
+                if self.search_relative {
+                    // filter out the tags according to cache
+                    let nested_anchors = self
+                        .filter_a_tags(fixed)
+                        .await
+                        .into_iter()
+                        // https://x.com, /walker, ../some-url
+                        .map(|url| self.adjust_urls(url))
+                        .filter(|blank| blank != "") // apparently pre-filtering out cached URLs stops making this work?
+                        .collect::<Vec<String>>();
+
+                    // again iterate over received URLs
+                    for nested_href in nested_anchors {
+                        let cl2 = nested_href.clone();
+                        urls.push_and_remove_trailing_slashes(cl2);
+
+                        // check if relative since I already fixed them after mapping them while checking nested_a_tags
+                        if nested_href.starts_with(&self.url) {
+                            if !self.set.contains(&nested_href) {
+                                let deep_nested_anchors = self.filter_a_tags(nested_href).await;
+
+                                for deep_nested_href in &deep_nested_anchors {
+                                    if self.is_relative_url(&deep_nested_href) {
+                                        let fixed =
+                                            self.get_effective_href(deep_nested_href.to_string());
+
+                                        let cl = fixed.clone();
+
+                                        urls.push_and_remove_trailing_slashes(cl);
+                                        if !self.set.contains(&fixed) {
+                                            let recursed_anchors = self._shitty_walk(Some(fixed)).await;
+
+                                            for recursed_href in recursed_anchors.urls {
+                                                urls.push_and_remove_trailing_slashes(
+                                                    recursed_href.clone(),
+                                                );
+                                            }
+                                        }
+                                    } else {
+                                        let fixed =
+                                            self.remove_fragment((&deep_nested_href).to_string());
+
+                                        urls.push_and_remove_trailing_slashes(fixed.clone());
+                                    }
+                                }
+                            }
+                        } else {
+                            urls.push_and_remove_trailing_slashes(nested_href.clone());
+                        }
+                    }
+                } else {
+                    urls.push_and_remove_trailing_slashes(fixed.clone());
+                }
+            } else {
+                let fixed = self.remove_fragment(href);
+
+                urls.push_and_remove_trailing_slashes(fixed.clone());
+            }
+        }
+
+        urls
+    }
+
+    #[async_recursion]
     pub async fn walk(&mut self, url: Option<String>) -> URLs {
         let effective_url = match url {
             Some(k) => k,
@@ -192,90 +292,54 @@ impl Args {
             // Is the URL relative?
             if self.is_relative_url(&href) {
                 // prepend parent URl to the relative URL
+                // /docs -> https://parent-url/docs
+
                 let fixed = self.get_effective_href(href);
+
+                // Account for URLs that do not have nested anchors.
+                urls.push_and_remove_trailing_slashes(fixed.clone());
+
                 if self.search_relative {
-                    // filter out the tags according to cache
                     let nested_anchors = self
-                        .filter_a_tags(fixed)
+                        .filter_a_tags(fixed.clone())
                         .await
                         .into_iter()
-                        .map(|x| {
-                            let curr = if self.is_relative_url(&x) {
-                                self.get_effective_href(x)
-                            } else {
-                                self.remove_fragment(x)
-                            };
-                            if !self.set.contains(&curr) {
-                                return curr;
-                            } else {
-                                return "".to_string();
-                            }
-                        })
+                        .map(|url| self.adjust_urls(url))
                         .filter(|blank| blank != "") // apparently pre-filtering out cached URLs stops making this work?
                         .collect::<Vec<String>>();
 
-                    // again iterate over received URLs
                     for nested_href in nested_anchors {
-                        let cl = nested_href.clone();
-                        let cl2 = nested_href.clone();
-                        urls.push(cl2);
-
-                        // check if relative since I already fixed them after mapping them while checking nested_a_tags
+                        urls.push_and_remove_trailing_slashes(nested_href.clone());
                         if nested_href.starts_with(&self.url) {
-                            if !self.set.contains(&nested_href) {
-                                let deep_nested_anchors = self.filter_a_tags(nested_href).await;
+                            let recursed_anchors = self.walk(Some(nested_href)).await;
 
-                                self.set.insert(cl);
-
-                                for deep_nested_href in &deep_nested_anchors {
-                                    if self.is_relative_url(&deep_nested_href) {
-                                        let fixed =
-                                            self.get_effective_href(deep_nested_href.to_string());
-
-                                        let cl = fixed.clone();
-                                        let cl2 = fixed.clone();
-                                        urls.push(cl);
-                                        if !self.set.contains(&fixed) {
-                                            let recursed_anchors = self.walk(Some(fixed)).await;
-
-                                            for recursed_href in recursed_anchors.urls {
-                                                urls.push(recursed_href.clone());
-                                                if !self.set.contains(&recursed_href.clone()) {
-                                                    self.insert(recursed_href);
-                                                }
-                                            }
-
-                                            self.insert(cl2);
-                                        }
-                                    } else {
-                                        let fixed =
-                                            self.remove_fragment((&deep_nested_href).to_string());
-
-                                        urls.push(fixed.clone());
-                                        self.insert(fixed);
-                                    }
-                                }
+                            for recursed_href in recursed_anchors.urls {
+                                urls.push_and_remove_trailing_slashes(recursed_href);
                             }
-                        } else {
-                            urls.push(nested_href.clone());
-                            self.insert(nested_href);
                         }
                     }
-                } else {
-                    urls.push(fixed.clone());
-                    self.insert(fixed);
                 }
             } else {
                 let fixed = self.remove_fragment(href);
 
-                urls.push(fixed.clone());
-                if !self.set.contains(&fixed) {
-                    self.insert(fixed);
-                }
+                urls.push_and_remove_trailing_slashes(fixed.clone());
             }
         }
 
         urls
+    }
+
+    fn adjust_urls(&self, url: String) -> String {
+        let curr = if self.is_relative_url(&url) {
+            self.get_effective_href(url)
+        } else {
+            self.remove_fragment(url)
+        };
+        if !self.set.contains(&curr) {
+            return curr;
+        } else {
+            return "".to_string();
+        }
     }
 
     fn insert(&mut self, value: String) {

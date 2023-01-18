@@ -54,12 +54,16 @@ async fn main() {
     };
     if cli_args.singular {
         let parsed_response = Url::parse(&args.url).unwrap();
-        let base_url = args.base_url(parsed_response).unwrap().to_string();
+        let base_url = args._base_url(parsed_response).unwrap().to_string();
         let domain: String = args.remove_trailing_slashes(
             base_url.split("//").into_iter().collect::<Vec<&str>>()[1].to_string(),
         );
 
         return println!("{:#?}", dbg!((domain, 80).to_socket_addrs()));
+
+        // let t = args._shitty_walk(Some(args.url.clone())).await;
+
+        // return println!("{:#?}", t);
     }
 
     println!("Running...");
