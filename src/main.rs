@@ -182,6 +182,8 @@ async fn check_status(
         .map(|url| {
             let mut parsed_url = Url::parse(&url).unwrap();
 
+
+			// just making sure for now.
             parsed_url.set_fragment(None);
 
             parsed_url.to_string()
@@ -200,6 +202,7 @@ async fn check_status(
                     let status = resp.status();
                     Ok((cl, status))
                 }
+				// @TODO: Perform a GET request if HEAD fails.
                 Err(err) => Err((cl, err.to_string())),
             }
         }

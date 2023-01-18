@@ -87,7 +87,8 @@ pub async fn get_status_buffer_unordered(
 
                     Ok((href, status))
                 }
-                Err(err) => Err((href, err.to_string())),
+                // @TODO: Perform a GET request if HEAD fails.
+                Err(err) => Err((href, err.to_string())), 
             }
         }
     }))
