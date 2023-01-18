@@ -33,6 +33,10 @@ Since I don't wait between each request, some websites might enforce their rate-
 Examples of what the data would look like after the process is over can be found in the [data](/data/) directory. 
 
 
+## Install
+
+To install `walker`, you will need to have `cargo` configured in your environment. You can see how to do so [here](https://doc.rust-lang.org/cargo/getting-started/installation.html). Once you're done doing so, simply run `cargo install link-walker`, and let it install.
+
 ## Usage
 
 Using `walker` is easy. It has a dead-simple CLI interface that can be used to visually see the results of the analysis. Options for it are:
@@ -50,7 +54,7 @@ Options:
 So, for example, doing:
 
 ```bash
-walker --url "https://ynb.sh"
+link-walker --url "https://ynb.sh"
 ```
 
 ...would result in:
@@ -92,7 +96,7 @@ Time to verify links: 0 seconds
 
 To debug what URL `walker` is currently fetching, simply pass it a `-d` debug flag.
 
-In situations where `walker` is unable to resolve some arbitrary URL, it will properly show the error while verifying all the links. Often, this error occurs because `reqwest` is unable to resolve its DNS. You can check if that is the case by running `walker --url <URL> -s`. If it does not return an error, there is probably something else going on with the URL that needs to be looked at.
+In situations where `walker` is unable to resolve some arbitrary URL, it will properly show the error while verifying all the links. Often, this error occurs because `reqwest` is unable to resolve its DNS. You can check if that is the case by running `link-walker --url <URL> -s`. If it does not return an error, there is probably something else going on with the URL that needs to be looked at.
 
 ## Extra
 

@@ -61,7 +61,7 @@ async fn main() {
 
         return println!("{:#?}", dbg!((domain, 80).to_socket_addrs()));
 
-        // let t = args._shitty_walk(Some(args.url.clone())).await;
+        // let t = args.wip_walk_two(Some(args.url.clone())).await;
 
         // return println!("{:#?}", t);
     }
@@ -71,7 +71,8 @@ async fn main() {
     let links = args.walk(None).await;
     let get_elapsed = now.elapsed().as_secs().to_string().bright_magenta();
 
-    let sing = reqwest::Client::builder()
+
+      let sing = reqwest::Client::builder()
         .danger_accept_invalid_certs(true)
         .timeout(Duration::from_secs(5))
         .build()
@@ -91,7 +92,7 @@ async fn main() {
             .urls
             .clone()
             .into_iter()
-			// Filter out mailto and file:// URLs
+            // Filter out mailto and file:// URLs
             .filter(|x| !x.starts_with("mailto") || !x.starts_with("file:"))
             .collect(),
         Some(cli_args.debug),
@@ -181,10 +182,10 @@ async fn check_status(
     let correct = urls
         .into_iter()
         .map(|url| {
+
             let mut parsed_url = Url::parse(&url).unwrap();
 
-
-			// just making sure for now.
+            // just making sure for now.
             parsed_url.set_fragment(None);
 
             parsed_url.to_string()
@@ -203,7 +204,7 @@ async fn check_status(
                     let status = resp.status();
                     Ok((cl, status))
                 }
-				// @TODO: Perform a GET request if HEAD fails.
+                // @TODO: Perform a GET request if HEAD fails.
                 Err(err) => Err((cl, err.to_string())),
             }
         }
