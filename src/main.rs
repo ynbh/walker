@@ -11,7 +11,7 @@ use std::net::ToSocketAddrs;
 
 use clap::Parser;
 use parse::parse;
-use utils::{get_domain_name, is_valid_url, save};
+use utils::{get_domain_name, save};
 
 mod parse;
 mod utils;
@@ -64,7 +64,7 @@ async fn main() {
 
     println!("Running...");
     let now = Instant::now();
-    let links = args.recursively_get_links_from_website(None).await;
+    let links = args.walk(None).await;
     let get_elapsed = now.elapsed().as_secs().to_string().bright_magenta();
 
     let sing = reqwest::Client::builder()
@@ -77,7 +77,7 @@ async fn main() {
     save(
         serde_json::to_string_pretty(&links.urls).unwrap(),
         file_path.clone(),
-        "links"
+        "links",
     )
     .unwrap();
 
@@ -151,7 +151,6 @@ async fn main() {
 
         let parsed_response = parse(response.clone());
 
-
         save(parsed_response.clone(), file_path, "status").unwrap();
 
         if cli_args.construct {
@@ -175,33 +174,26 @@ async fn check_status(
     debug: Option<bool>,
 ) -> Vec<Result<(String, StatusCode), (String, String)>> {
     let correct = urls
-        .clone()
         .into_iter()
-        .filter(|x| {
-            let is_valid_url = is_valid_url(x.to_string());
-            let matchable = match Url::parse(x) {
-                Ok(_) => true,
-                Err(_) => false,
-            };
+        .map(|url| {
+            let mut parsed_url = Url::parse(&url).unwrap();
 
-            if !is_valid_url || !matchable {
-                return false;
-            }
+            parsed_url.set_fragment(None);
 
-            true
+            parsed_url.to_string()
         })
-        .collect::<Vec<String>>();
+        .collect::<HashSet<String>>();
+
     let futures = correct.iter().map(|url| {
-        let req = client.head(url);
+        let req = client.clone().head(url);
         if debug.unwrap() {
             println!("Verifying {}", url.bright_yellow());
         }
-        async move {
+        async {
             let cl = url.clone();
             match req.send().await {
                 Ok(resp) => {
                     let status = resp.status();
-
                     Ok((cl, status))
                 }
                 Err(err) => Err((cl, err.to_string())),

@@ -107,7 +107,6 @@ impl Args {
         Ok(url)
     }
     pub async fn filter_a_tags(&self, url: String) -> Vec<String> {
-
         let url = self.remove_fragment(url);
         let mut v = vec![];
 
@@ -166,7 +165,7 @@ impl Args {
     }
 
     #[async_recursion]
-    pub async fn recursively_get_links_from_website(&mut self, url: Option<String>) -> URLs {
+    pub async fn walk(&mut self, url: Option<String>) -> URLs {
         let effective_url = match url {
             Some(k) => k,
             None => {
@@ -185,18 +184,18 @@ impl Args {
         }
 
         // Get all URLs from current URL
-        let a_tags = self
+        let anchors = self
             .filter_a_tags(self.remove_trailing_slashes(effective_url))
             .await;
 
-        for href in a_tags {
+        for href in anchors {
             // Is the URL relative?
             if self.is_relative_url(&href) {
                 // prepend parent URl to the relative URL
                 let fixed = self.get_effective_href(href);
                 if self.search_relative {
                     // filter out the tags according to cache
-                    let nested_a_tags = self
+                    let nested_anchors = self
                         .filter_a_tags(fixed)
                         .await
                         .into_iter()
@@ -216,70 +215,60 @@ impl Args {
                         .collect::<Vec<String>>();
 
                     // again iterate over received URLs
-                    for tag in nested_a_tags {
-                        let cl = tag.clone();
-                        let cl2 = tag.clone();
+                    for nested_href in nested_anchors {
+                        let cl = nested_href.clone();
+                        let cl2 = nested_href.clone();
                         urls.push(cl2);
 
                         // check if relative since I already fixed them after mapping them while checking nested_a_tags
-                        if tag.starts_with(&self.url) {
-                            if !self.set.contains(&tag) {
-                                let a_tags = self.filter_a_tags(tag).await;
+                        if nested_href.starts_with(&self.url) {
+                            if !self.set.contains(&nested_href) {
+                                let deep_nested_anchors = self.filter_a_tags(nested_href).await;
 
                                 self.set.insert(cl);
 
-                                for href in &a_tags {
-                                    if self.is_relative_url(&href) {
-                                        let fixed = self.get_effective_href(href.to_string());
-                                 
+                                for deep_nested_href in &deep_nested_anchors {
+                                    if self.is_relative_url(&deep_nested_href) {
+                                        let fixed =
+                                            self.get_effective_href(deep_nested_href.to_string());
+
                                         let cl = fixed.clone();
                                         let cl2 = fixed.clone();
                                         urls.push(cl);
                                         if !self.set.contains(&fixed) {
-                                            let recursed_urls = self
-                                                .recursively_get_links_from_website(Some(fixed))
-                                                .await;
+                                            let recursed_anchors = self.walk(Some(fixed)).await;
 
-                                            for link in recursed_urls.urls {
-                                                let cl = link.clone();
-                                                urls.push(link);
-                                                if !self.set.contains(&cl) {
-                                                    let link_cl = cl.clone();
-
-                                                    self.insert(link_cl);
+                                            for recursed_href in recursed_anchors.urls {
+                                                urls.push(recursed_href.clone());
+                                                if !self.set.contains(&recursed_href.clone()) {
+                                                    self.insert(recursed_href);
                                                 }
                                             }
 
                                             self.insert(cl2);
                                         }
                                     } else {
-                                        let fixed = self.remove_fragment(
-                                            (&href).to_string()
-                                        );
-                                        let fixed_cl = fixed.clone();
-                                        urls.push(fixed);
-                                        self.insert(fixed_cl);
+                                        let fixed =
+                                            self.remove_fragment((&deep_nested_href).to_string());
+
+                                        urls.push(fixed.clone());
+                                        self.insert(fixed);
                                     }
                                 }
                             }
                         } else {
-                            let cl = tag.clone();
-
-                            urls.push(tag);
-                            self.insert(cl);
+                            urls.push(nested_href.clone());
+                            self.insert(nested_href);
                         }
                     }
                 } else {
-                    let cl = fixed.clone();
-                    urls.push(fixed);
-                    self.insert(cl);
+                    urls.push(fixed.clone());
+                    self.insert(fixed);
                 }
             } else {
-                let cl = href.clone();
-                let fixed = self.remove_fragment(cl);
+                let fixed = self.remove_fragment(href);
 
-                let cl_fixed = fixed.clone();
-                urls.push(cl_fixed);
+                urls.push(fixed.clone());
                 if !self.set.contains(&fixed) {
                     self.insert(fixed);
                 }
