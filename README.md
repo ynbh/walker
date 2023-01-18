@@ -94,6 +94,6 @@ To debug what URL `walker` is currently fetching, simply pass it a `-d` debug fl
 
 In situations where `walker` is unable to resolve some arbitrary URL, it will properly show the error while verifying all the links. Often, this error occurs because `reqwest` is unable to resolve its DNS. You can check if that is the case by running `walker --url <URL> -s`. If it does not return an error, there is probably something else going on with the URL that needs to be looked at.
 
-## Read
+## Extra
 
-[Blog post detailing how I made this tool](https://ynb.sh/posts/walker)
+Note that this is an experimental tool, and I only made this to learn more about Rust. I wrote a [blog post detailing how I made it!](https://ynb.sh/posts/walker).
