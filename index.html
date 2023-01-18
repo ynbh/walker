@@ -234,19 +234,17 @@
         <div class="outline">
    
         <h1>Walker</h1>
-<p>Walker is a tool that performs a recursive analysis of a website, including all subdirectories and pages, to search for faulty links. It operates under the premise that the homepage of the site in question leads to other pages within the website, which subsequently lead to yet more pages. To optimize speed, all URLs that have already been encountered are cached in a <code>HashSet</code> to prevent duplicate <code>fetch</code> requests. The <code>urls</code> <code>HashSet</code> contained within the <code>URLs</code> struct stores all URLs that return a successful <code>200 OK</code> response. All requests occur concurrently, so the process is fast as fuck.</p>
-<p>It is worth noting that this process may take an indeterminate amount of time, as a website may contain an infinite number of nested links. A potential future update to the recursive function could be the addition of a <code>depth</code> parameter, which would restrict recursion to only a specified number of levels. I don't plan on implementing this any time soon, though!</p>
-<p>Also, <code>walker</code> is fast as fuck. After it recursively acquires all the URLs in a website, it quickly(say, 0 seconds) performs status check for all of them concurrently. For example, it verified all the links(2026) on <a href="https://nextjs.org">Next</a>'s website in 65 seconds:</p>
+<p>Walker is a tool that performs a recursive analysis of a website, including all subdirectories and pages, to search for faulty links. It operates under the premise that the homepage of the site in question leads to other pages within the website, which subsequently lead to yet more pages.</p>
+<p>It is worth noting that this process may take an indeterminate amount of time, as a website may contain an infinite number of nested links. A potential future update to the recursive function could be the addition of a <code>depth</code> parameter, which would restrict recursion to only a specified number of levels. I don't plan on implementing this any time soon due to CBSE board exams and college applications, though!</p>
+<p>Also, <code>walker</code> is fast as fuck. After it acquires all the URLs in a website, it quickly(say, 0 seconds) performs status check for all of them concurrently. For example, it verified all the links(2026) on <a href="https://nextjs.org">Next</a>'s website in 65 seconds:</p>
 <pre><code class="language-txt">Stats
 Time to get all links: 65 seconds
 Time to verify links: 0 seconds
 </code></pre>
 <h2>Quirks</h2>
 <h3>Client side rendering</h3>
-<p>Since the implementation of this tool works through fetching the HTML of the website in question, it would be impossible to detect, or perhaps even retrieve the initial HTML, for websites that render on the client.</p>
-<p>Therefore, <code>walker</code> only works for static and server-rendered sites. It should be noted that when I mention server-rendered, I mean websites that fetch all HTML in their initial request to the server, and not just selective data like <code>meta</code> tags for bots to crawl.</p>
-<p>There could be cases where some parts of the website are server-rendered, while some of them are client-side rendered. In these cases, <code>walker</code> will only parse and verify links it can find on the server-side rendered HTML.</p>
-<p>I could perhaps use something like headless chrome to get the HTML for these pages, but that only adds overhead to problem I was initially trying to solve. I am not keen on making headless chrome work in Rust. That task sounds like a better job for TypeScript.</p>
+<p>Since the implementation of this tool works through fetching the HTML of the website in question, it would be impossible for it to retrieve HTML for pages that render on the client. Basically, only the HTML available when you view the page source is analyzed.</p>
+<p>I could perhaps use something like headless chrome to get the HTML for these pages, but that only adds overhead to problem I was initially trying to solve.</p>
 <h3>Duplicate Requests</h3>
 <p>For some reason, <code>walker</code> keeps sending duplicate requests. That is, URLs that have been cached keep getting requests &#x3C;4 times. I am not sure <em>why</em> this happens, but it feels like a rust-specific quirk, since the same script works perfectly fine in TypeScript. See:</p>
 <p><img src="https://media.discordapp.net/attachments/841704583364608051/1063072047527366786/image.png" alt="Multiple requests"></p>
@@ -255,7 +253,7 @@ Time to verify links: 0 seconds
 <p>Since I don't wait between each request, some websites might enforce their rate-limiting policies on <code>walker</code>, and hence cause it to error out for URLs which are working perfectly fine. In these cases, if the API is returning semantic error codes, <code>walker</code> will display something like <code>429 Too Many Requests</code>.</p>
 <p><code>walker</code> has a timeout of 5 seconds between each request. If the URL does not return a response within 5 seconds, it will error out and show that the operation was timed out.</p>
 <h2>Examples</h2>
-<p>Examples of what the data would look like after the process is over can be found in the <a href="/data/">data</a> directory. All links in it are unique. However, the data simply only shows what links are <em>available</em> on the website, and not if they are valid or not. To see what links are functional, download the binary from <a href="/download/">download</a> and run it with a <code>--url</code> argument.</p>
+<p>Examples of what the data would look like after the process is over can be found in the <a href="/data/">data</a> directory.</p>
 <h2>Usage</h2>
 <p>Using <code>walker</code> is easy. It has a dead-simple CLI interface that can be used to visually see the results of the analysis. Options for it are:</p>
 <pre><code class="language-bash">Options:
