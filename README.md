@@ -96,4 +96,4 @@ In situations where `walker` is unable to resolve some arbitrary URL, it will pr
 
 ## Extra
 
-Note that this is an experimental tool, and I only made this to learn more about Rust. I wrote a [blog post detailing how I made it!](https://ynb.sh/posts/walker).
+Note that this is an experimental tool, and I only made this to learn more about Rust. I wrote a [blog post detailing how I made it!](https://ynb.sh/posts/walker)
