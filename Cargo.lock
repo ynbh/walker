@@ -776,6 +776,22 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "201de327520df007757c1f0adce6e827fe8562fbc28bfd9c15571c66ca1f5f79"
 
 [[package]]
+name = "link-walker"
+version = "0.1.0"
+dependencies = [
+ "arboard",
+ "async-recursion",
+ "clap",
+ "colored",
+ "futures",
+ "reqwest",
+ "scraper",
+ "serde",
+ "serde_json",
+ "tokio",
+]
+
+[[package]]
 name = "linux-raw-sys"
 version = "0.1.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1939,22 +1955,6 @@ name = "version_check"
 version = "0.9.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "49874b5167b65d7193b8aba1567f5c7d93d001cafc34600cee003eda787e483f"
-
-[[package]]
-name = "walker"
-version = "0.1.0"
-dependencies = [
- "arboard",
- "async-recursion",
- "clap",
- "colored",
- "futures",
- "reqwest",
- "scraper",
- "serde",
- "serde_json",
- "tokio",
-]
 
 [[package]]
 name = "want"
