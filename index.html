@@ -245,10 +245,6 @@ Time to verify links: 0 seconds
 <h3>Client side rendering</h3>
 <p>Since the implementation of this tool works through fetching the HTML of the website in question, it would be impossible for it to retrieve HTML for pages that render on the client. Basically, only the HTML available when you view the page source is analyzed.</p>
 <p>I could perhaps use something like headless chrome to get the HTML for these pages, but that only adds overhead to problem I was initially trying to solve.</p>
-<h3>Duplicate Requests</h3>
-<p>For some reason, <code>walker</code> keeps sending duplicate requests. That is, URLs that have been cached keep getting requests &#x3C;4 times. I am not sure <em>why</em> this happens, but it feels like a rust-specific quirk, since the same script works perfectly fine in TypeScript. See:</p>
-<p><img src="https://media.discordapp.net/attachments/841704583364608051/1063072047527366786/image.png" alt="Multiple requests"></p>
-<p>There is a massive performance optimization here. But I quite don't know how to achieve that. Welp, I guess I will eventually figure it out.</p>
 <h3>Rate limits</h3>
 <p>Since I don't wait between each request, some websites might enforce their rate-limiting policies on <code>walker</code>, and hence cause it to error out for URLs which are working perfectly fine. In these cases, if the API is returning semantic error codes, <code>walker</code> will display something like <code>429 Too Many Requests</code>.</p>
 <p><code>walker</code> has a timeout of 5 seconds between each request. If the URL does not return a response within 5 seconds, it will error out and show that the operation was timed out.</p>

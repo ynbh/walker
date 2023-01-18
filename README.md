@@ -21,13 +21,6 @@ Since the implementation of this tool works through fetching the HTML of the web
 
 I could perhaps use something like headless chrome to get the HTML for these pages, but that only adds overhead to problem I was initially trying to solve.
 
-### Duplicate Requests
-
-For some reason, `walker` keeps sending duplicate requests. That is, URLs that have been cached keep getting requests <4 times. I am not sure _why_ this happens, but it feels like a rust-specific quirk, since the same script works perfectly fine in TypeScript. See:
-
-![Multiple requests](https://media.discordapp.net/attachments/841704583364608051/1063072047527366786/image.png)
-
-There is a massive performance optimization here. But I quite don't know how to achieve that. Welp, I guess I will eventually figure it out.
 
 ### Rate limits
 
