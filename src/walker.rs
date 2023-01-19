@@ -1,6 +1,7 @@
 use reqwest::Url;
 use reqwest::{header::USER_AGENT, Client};
 use scraper::{Html, Selector};
+
 use std::collections::hash_set::HashSet;
 
 use async_recursion::async_recursion;
@@ -161,7 +162,7 @@ impl Args {
     // Main Function
 
     #[async_recursion]
-    pub async fn walk(&mut self, url: Option<String>) -> URLs {
+    pub async fn walk_sync(&mut self, url: Option<String>) -> URLs {
         let effective_url = match url {
             Some(k) => k,
             None => {
@@ -186,34 +187,12 @@ impl Args {
         for href in anchors {
             if self.is_relative_url(&href) {
                 let fixed = self.get_effective_href(href.clone());
-
                 urls.insert_and_remove_trailing_slashes(fixed.clone());
                 if self.search_relative {
-                    let nested_anchors = self
-                        .filter_anchors(fixed.clone())
-                        .await
-                        .into_iter()
-                        .filter(|blank| blank != "") // apparently pre-filtering out cached URLs stops making this work?
-                        .collect::<Vec<String>>();
-
-                    for nested_href in nested_anchors {
-                        if self.is_relative_url(&nested_href) {
-                            let fixed = self.get_effective_href(nested_href.clone());
-
-                            urls.insert_and_remove_trailing_slashes(fixed.clone());
-
-                            let recursed_anchors = self.walk(Some(fixed)).await;
-
-                            for recursed_href in recursed_anchors.urls {
-                                urls.insert_and_remove_trailing_slashes(recursed_href);
-                            }
-                        } else {
-                            urls.insert_and_remove_trailing_slashes(nested_href)
-                        }
+                    let recursed_anchors = self.walk_sync(Some(fixed)).await;
+                    for recursed_href in recursed_anchors.urls {
+                        urls.insert_and_remove_trailing_slashes(recursed_href);
                     }
-                } else {
-                    let fixed_href = self.remove_fragment(href.clone());
-                    urls.insert_and_remove_trailing_slashes(fixed_href);
                 }
             } else {
                 let fixed_href = self.remove_fragment(href.clone());

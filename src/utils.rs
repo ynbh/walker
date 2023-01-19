@@ -6,9 +6,9 @@ pub fn is_valid_url(url: String) -> bool {
     url.starts_with("http") || url.starts_with("https")
 }
 
-pub fn save(str: String, url: String, key: &str) -> std::io::Result<()> {
+pub fn save(str: String, url: &String, key: &str, format: &str) -> std::io::Result<()> {
     let working_dir = format!("./data/{url}");
-    let save_path = format!("/{}-{key}.json", url);
+    let save_path = format!("/{}-{key}.{format}", url);
 
     match create_dir(format!("{working_dir}")) {
         Ok(_) => {

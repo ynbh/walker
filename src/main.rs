@@ -68,11 +68,10 @@ async fn main() {
 
     println!("Running...");
     let now = Instant::now();
-    let links = args.walk(None).await;
-    let get_elapsed = now.elapsed().as_secs().to_string().bright_magenta();
+    let links = args.walk_sync(None).await;
+    let get_elapsed = now.elapsed().as_secs().to_string();
 
-
-      let sing = reqwest::Client::builder()
+    let sing = reqwest::Client::builder()
         .danger_accept_invalid_certs(true)
         .timeout(Duration::from_secs(5))
         .build()
@@ -81,8 +80,9 @@ async fn main() {
 
     save(
         serde_json::to_string_pretty(&links.urls).unwrap(),
-        file_path.clone(),
+        &file_path,
         "links",
+        "json",
     )
     .unwrap();
 
@@ -134,30 +134,35 @@ async fn main() {
             }
         }
 
-        let loop_elapsed = now.elapsed().as_secs().to_string().bright_magenta();
+        let loop_elapsed = now.elapsed().as_secs().to_string();
         let mut clipboard = Clipboard::new().unwrap();
 
-        let message = format!(
-            "{}\n{}\n{}",
-            "Stats".underline().bright_green(),
+        let msg = format!("## Stats \nTime to get {} links: **{get_elapsed}** seconds\nTime to verify all links: **{loop_elapsed}** seconds", links.urls.len());
+        println!(
+            "{}",
             format!(
-                "{}{} {}",
-                "Time to get all links: ".bright_yellow(),
-                get_elapsed,
-                "seconds".bright_magenta()
-            ),
-            format!(
-                "{}{} {}",
-                "Time to verify links: ".bright_yellow(),
-                loop_elapsed,
-                "seconds".bright_magenta()
-            ),
+                "{}\n{}\n{}",
+                "Stats".underline().bright_green(),
+                format!(
+                    "{}{} {}",
+                    "Time to get {} links: ".bright_yellow(),
+                    get_elapsed.bright_magenta(),
+                    "seconds".bright_magenta()
+                ),
+                format!(
+                    "{}{} {}",
+                    "Time to verify links: ".bright_yellow(),
+                    loop_elapsed.bright_magenta(),
+                    "seconds".bright_magenta()
+                ),
+            )
         );
-        println!("{}", message);
 
         let parsed_response = parse(response.clone());
 
-        save(parsed_response.clone(), file_path, "status").unwrap();
+        save(parsed_response.clone(), &file_path, "status", "json").unwrap();
+
+        save(msg, &file_path, "stats", "md").unwrap();
 
         if cli_args.construct {
             match clipboard.set_text(parsed_response) {
@@ -182,7 +187,6 @@ async fn check_status(
     let correct = urls
         .into_iter()
         .map(|url| {
-
             let mut parsed_url = Url::parse(&url).unwrap();
 
             // just making sure for now.
