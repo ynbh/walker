@@ -17,7 +17,7 @@ Time to verify links: 0 seconds
 ### Client side rendering
 
 Since the implementation of this tool works through fetching the HTML of the website in question, it would be impossible for it to retrieve HTML for pages that render on the client. Basically, only the HTML available when you view the page source is analyzed.
-
+					
 
 I could perhaps use something like headless chrome to get the HTML for these pages, but that only adds overhead to problem I was initially trying to solve.
 

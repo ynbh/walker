@@ -250,6 +250,8 @@ Time to verify links: 0 seconds
 <p><code>walker</code> has a timeout of 5 seconds between each request. If the URL does not return a response within 5 seconds, it will error out and show that the operation was timed out.</p>
 <h2>Examples</h2>
 <p>Examples of what the data would look like after the process is over can be found in the <a href="/data/">data</a> directory.</p>
+<h2>Install</h2>
+<p>To install <code>walker</code>, you will need to have <code>cargo</code> configured in your environment. You can see how to do so <a href="https://doc.rust-lang.org/cargo/getting-started/installation.html">here</a>. Once you're done doing so, simply run <code>cargo install link-walker</code>, and let it install.</p>
 <h2>Usage</h2>
 <p>Using <code>walker</code> is easy. It has a dead-simple CLI interface that can be used to visually see the results of the analysis. Options for it are:</p>
 <pre><code class="language-bash">Options:
@@ -261,7 +263,7 @@ Time to verify links: 0 seconds
   -V, --version    Print version information
 </code></pre>
 <p>So, for example, doing:</p>
-<pre><code class="language-bash">walker --url "https://ynb.sh"
+<pre><code class="language-bash">link-walker --url "https://ynb.sh"
 </code></pre>
 <p>...would result in:</p>
 <pre><code class="language-bash">Received 4 links. Iterating now...
@@ -295,7 +297,7 @@ Time to get all links: 1 seconds
 Time to verify links: 0 seconds
 </code></pre>
 <p>To debug what URL <code>walker</code> is currently fetching, simply pass it a <code>-d</code> debug flag.</p>
-<p>In situations where <code>walker</code> is unable to resolve some arbitrary URL, it will properly show the error while verifying all the links. Often, this error occurs because <code>reqwest</code> is unable to resolve its DNS. You can check if that is the case by running <code>walker --url &#x3C;URL> -s</code>. If it does not return an error, there is probably something else going on with the URL that needs to be looked at.</p>
+<p>In situations where <code>walker</code> is unable to resolve some arbitrary URL, it will properly show the error while verifying all the links. Often, this error occurs because <code>reqwest</code> is unable to resolve its DNS. You can check if that is the case by running <code>link-walker --url &#x3C;URL> -s</code>. If it does not return an error, there is probably something else going on with the URL that needs to be looked at.</p>
 <h2>Extra</h2>
 <p>Note that this is an experimental tool, and I only made this to learn more about Rust. I wrote a <a href="https://ynb.sh/posts/walker">blog post detailing how I made it!</a></p>
         </div>
