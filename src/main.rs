@@ -137,7 +137,7 @@ async fn main() {
         let loop_elapsed = now.elapsed().as_secs().to_string();
         let mut clipboard = Clipboard::new().unwrap();
 
-        let msg = format!("## Stats \nTime to get {} links: **{get_elapsed}** seconds\nTime to verify all links: **{loop_elapsed}** seconds", links.urls.len());
+        let msg = format!("## Stats \nTime to get {} links: **{get_elapsed}** seconds\n\nTime to verify all links: **{loop_elapsed}** seconds", links.urls.len());
         println!(
             "{}",
             format!(
