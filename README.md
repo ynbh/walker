@@ -28,6 +28,10 @@ Since I don't wait between each request, some websites might enforce their rate-
 
 `walker` has a timeout of 5 seconds between each request. If the URL does not return a response within 5 seconds, it will error out and show that the operation was timed out.
 
+## Head requests
+
+To save on bytes, `walker` performs `HEAD` requests instead of `GET` requests. However, some websites might deny responding to this method, which can error out `walker` for them. 
+
 ## Examples
 
 Examples of what the data would look like after the process is over can be found in the [data](/data/) directory. 

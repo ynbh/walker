@@ -1,19 +1,20 @@
 use std::collections::HashSet;
 use std::time::{Duration, Instant};
+use std::net::ToSocketAddrs;
 
 use futures::future::join_all;
 
 use reqwest::{StatusCode, Url};
-
-use arboard::Clipboard;
 use colored::*;
-use std::net::ToSocketAddrs;
+use arboard::Clipboard;
+
 
 use clap::Parser;
 use parse::parse;
 use utils::{get_domain_name, save};
 
 mod parse;
+mod stats;
 mod utils;
 mod walker;
 
@@ -45,13 +46,14 @@ struct CLIArgs {
 async fn main() {
     let cli_args = CLIArgs::parse();
 
-    let mut args = walker::Args {
-        url: cli_args.url,
-        search_relative: cli_args.relative,
-        debug: cli_args.debug,
-        client: reqwest::Client::new(),
-        set: HashSet::new(),
-    };
+    let mut args = walker::Args::new(
+        cli_args.url,
+        cli_args.relative,
+        cli_args.debug,
+        reqwest::Client::new(),
+        HashSet::new(),
+    );
+
     if cli_args.singular {
         let parsed_response = Url::parse(&args.url).unwrap();
         let base_url = args._base_url(parsed_response).unwrap().to_string();
@@ -60,10 +62,6 @@ async fn main() {
         );
 
         return println!("{:#?}", dbg!((domain, 80).to_socket_addrs()));
-
-        // let t = args.wip_walk_two(Some(args.url.clone())).await;
-
-        // return println!("{:#?}", t);
     }
 
     println!("Running...");
@@ -92,7 +90,6 @@ async fn main() {
             .urls
             .clone()
             .into_iter()
-            // Filter out mailto and file:// URLs
             .filter(|x| !x.starts_with("mailto") || !x.starts_with("file:"))
             .collect(),
         Some(cli_args.debug),
@@ -137,35 +134,20 @@ async fn main() {
         let loop_elapsed = now.elapsed().as_secs().to_string();
         let mut clipboard = Clipboard::new().unwrap();
 
-        let msg = format!("## Stats \nTime to get {} links: **{get_elapsed}** seconds\n\nTime to verify all links: **{loop_elapsed}** seconds", links.urls.len());
-        println!(
-            "{}",
-            format!(
-                "{}\n{}\n{}",
-                "Stats".underline().bright_green(),
-                format!(
-                    "{}{} {}",
-                    "Time to get {} links: ".bright_yellow(),
-                    get_elapsed.bright_magenta(),
-                    "seconds".bright_magenta()
-                ),
-                format!(
-                    "{}{} {}",
-                    "Time to verify links: ".bright_yellow(),
-                    loop_elapsed.bright_magenta(),
-                    "seconds".bright_magenta()
-                ),
-            )
-        );
+        let link_count = links.urls.len();
 
-        let parsed_response = parse(response.clone());
+        let stats = stats::Stats::new(get_elapsed, loop_elapsed, link_count);
 
-        save(parsed_response.clone(), &file_path, "status", "json").unwrap();
+        println!("{}", stats);
 
-        save(msg, &file_path, "stats", "md").unwrap();
+        let jsonified_response = parse(response.clone());
+
+        save(jsonified_response.clone(), &file_path, "status", "json").unwrap();
+
+        save(stats.to_markdown(), &file_path, "stats", "md").unwrap();
 
         if cli_args.construct {
-            match clipboard.set_text(parsed_response) {
+            match clipboard.set_text(jsonified_response) {
                 Ok(_) => println!("Copied JSON response to clipboard."),
                 Err(e) => eprintln!(
                     "{}",

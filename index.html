@@ -248,6 +248,8 @@ Time to verify links: 0 seconds
 <h3>Rate limits</h3>
 <p>Since I don't wait between each request, some websites might enforce their rate-limiting policies on <code>walker</code>, and hence cause it to error out for URLs which are working perfectly fine. In these cases, if the API is returning semantic error codes, <code>walker</code> will display something like <code>429 Too Many Requests</code>.</p>
 <p><code>walker</code> has a timeout of 5 seconds between each request. If the URL does not return a response within 5 seconds, it will error out and show that the operation was timed out.</p>
+<h2>Head requests</h2>
+<p>To save on bytes, <code>walker</code> performs <code>HEAD</code> requests instead of <code>GET</code> requests. However, some websites might deny responding to this method, which can error out <code>walker</code> for them.</p>
 <h2>Examples</h2>
 <p>Examples of what the data would look like after the process is over can be found in the <a href="/data/">data</a> directory.</p>
 <h2>Install</h2>

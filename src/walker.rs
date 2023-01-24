@@ -1,11 +1,13 @@
 use reqwest::Url;
 use reqwest::{header::USER_AGENT, Client};
 use scraper::{Html, Selector};
+use regex::Regex;
+use colored::*;
 
 use std::collections::hash_set::HashSet;
+use std::process;
 
 use async_recursion::async_recursion;
-use colored::*;
 
 #[allow(dead_code)]
 #[derive(Debug)]
@@ -40,6 +42,22 @@ impl URLs {
 }
 
 impl Args {
+    pub fn new(
+        url: String,
+        search_relative: bool,
+        debug: bool,
+        client: Client,
+        set: HashSet<String>,
+    ) -> Args {
+        Args {
+            url,
+            search_relative,
+            debug,
+            client,
+            set,
+        }
+    }
+
     fn insert(&mut self, value: String) {
         if value != "" {
             if !self.set.contains(&value) {
@@ -93,14 +111,34 @@ impl Args {
         Selector::parse(tag).unwrap()
     }
 
+
+
+    // thanks to https://github.com/sindresorhus/is-absolute-url/blob/main/index.js
+    pub fn is_absolute_url(&self, url: &String) -> bool {
+        let windows_regex = Regex::new(r"^[a-zA-Z]:\\").unwrap();
+        let absolute_regex = Regex::new(r"^[a-zA-Z][a-zA-Z\d+\-.]*?:").unwrap();
+
+        if windows_regex.is_match(url) {
+            return false;
+        }
+
+        absolute_regex.is_match(url)
+    }
+
     // Checks if encountered URLs follow format like `/walker` and `../walker`
     pub fn is_relative_url(&self, url: &String) -> bool {
-        url.starts_with("/") || url.starts_with(".")
+        !self.is_absolute_url(url)
     }
 
     // Functions to fix URL
     pub fn remove_fragment(&self, url: String) -> String {
-        let mut parsed = Url::parse(&url).unwrap();
+        let mut parsed = match Url::parse(&url) {
+            Ok(n) => n,
+            Err(e) => {
+                println!("COULD NOT parse {url}: {e}");
+                process::exit(1)
+            }
+        };
 
         parsed.set_fragment(None);
 
