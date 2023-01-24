@@ -1,22 +1,24 @@
 use std::collections::HashSet;
-use std::time::{Duration, Instant};
 use std::net::ToSocketAddrs;
+use std::time::{Duration, Instant};
 
 use futures::future::join_all;
-
-use reqwest::{StatusCode, Url};
-use colored::*;
 use arboard::Clipboard;
-
-
+use colored::*;
+use reqwest::{StatusCode, Url};
 use clap::Parser;
+
 use parse::parse;
+use stats::Stats;
 use utils::{get_domain_name, save};
+use walker::Args;
 
 mod parse;
 mod stats;
 mod utils;
 mod walker;
+
+
 
 /// Tool to recursively analyze links from a website.
 #[derive(Parser, Debug)]
@@ -46,7 +48,7 @@ struct CLIArgs {
 async fn main() {
     let cli_args = CLIArgs::parse();
 
-    let mut args = walker::Args::new(
+    let mut args = Args::new(
         cli_args.url,
         cli_args.relative,
         cli_args.debug,
@@ -136,9 +138,9 @@ async fn main() {
 
         let link_count = links.urls.len();
 
-        let stats = stats::Stats::new(get_elapsed, loop_elapsed, link_count);
+        let stats = Stats::new(get_elapsed, loop_elapsed, link_count);
 
-        println!("{}", stats);
+        println!("{stats}");
 
         let jsonified_response = parse(response.clone());
 
