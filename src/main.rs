@@ -2,11 +2,11 @@ use std::collections::HashSet;
 use std::net::ToSocketAddrs;
 use std::time::{Duration, Instant};
 
-use futures::future::join_all;
 use arboard::Clipboard;
-use colored::*;
-use reqwest::{StatusCode, Url};
 use clap::Parser;
+use colored::*;
+use futures::future::join_all;
+use reqwest::{StatusCode, Url};
 
 use parse::parse;
 use stats::Stats;
@@ -17,8 +17,6 @@ mod parse;
 mod stats;
 mod utils;
 mod walker;
-
-
 
 /// Tool to recursively analyze links from a website.
 #[derive(Parser, Debug)]
@@ -134,7 +132,20 @@ async fn main() {
         }
 
         let loop_elapsed = now.elapsed().as_secs().to_string();
-        let mut clipboard = Clipboard::new().unwrap();
+        
+        let mut clipboard = match Clipboard::new() {
+            Ok(clipboard) => clipboard,
+            Err(e) => {
+                eprintln!(
+                    "{}",
+                    format!(
+                        "Some error occurred while initializing clipboard: {}",
+                        e.to_string().bright_red()
+                    )
+                );
+                return;
+            }
+        };
 
         let link_count = links.urls.len();
 

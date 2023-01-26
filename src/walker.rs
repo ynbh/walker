@@ -1,8 +1,8 @@
+use colored::*;
+use regex::Regex;
 use reqwest::Url;
 use reqwest::{header::USER_AGENT, Client};
 use scraper::{Html, Selector};
-use regex::Regex;
-use colored::*;
 
 use std::collections::hash_set::HashSet;
 use std::process;
@@ -111,8 +111,6 @@ impl Args {
         Selector::parse(tag).unwrap()
     }
 
-
-
     // thanks to https://github.com/sindresorhus/is-absolute-url/blob/main/index.js
     pub fn is_absolute_url(&self, url: &String) -> bool {
         let windows_regex = Regex::new(r"^[a-zA-Z]:\\").unwrap();
@@ -200,6 +198,12 @@ impl Args {
     // Main Function
 
     #[async_recursion]
+    /**
+     * Get a list of all URLs found on the page at the provided URL.
+     *
+     * @param url The URL to crawl.
+     * @returns A list of URLs found on the page.
+     */
     pub async fn walk_sync(&mut self, url: Option<String>) -> URLs {
         let effective_url = match url {
             Some(k) => k,

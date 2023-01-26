@@ -1,4 +1,4 @@
 ## Stats 
-Time to get 401 links: **5** seconds
+Time to get 402 links: **25** seconds
 
-Time to verify all links: **0** seconds
+Time to verify 402 links: **0** seconds
