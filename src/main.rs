@@ -132,20 +132,6 @@ async fn main() {
         }
 
         let loop_elapsed = now.elapsed().as_secs().to_string();
-        
-        let mut clipboard = match Clipboard::new() {
-            Ok(clipboard) => clipboard,
-            Err(e) => {
-                eprintln!(
-                    "{}",
-                    format!(
-                        "Some error occurred while initializing clipboard: {}",
-                        e.to_string().bright_red()
-                    )
-                );
-                return;
-            }
-        };
 
         let link_count = links.urls.len();
 
@@ -160,6 +146,20 @@ async fn main() {
         save(stats.to_markdown(), &file_path, "stats", "md").unwrap();
 
         if cli_args.construct {
+            let mut clipboard = match Clipboard::new() {
+                Ok(clipboard) => clipboard,
+                Err(e) => {
+                    eprintln!(
+                        "{}",
+                        format!(
+                            "Some error occurred while initializing clipboard: {}",
+                            e.to_string().bright_red()
+                        )
+                    );
+                    return;
+                }
+            };
+
             match clipboard.set_text(jsonified_response) {
                 Ok(_) => println!("Copied JSON response to clipboard."),
                 Err(e) => eprintln!(
