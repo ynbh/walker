@@ -38,6 +38,7 @@ struct CLIArgs {
     #[arg(short, long, default_value_t = false)]
     construct: bool,
 
+    /// Checks if the domain of the URL is resolvable.
     #[arg(short, long, default_value_t = false)]
     singular: bool,
 }
@@ -111,16 +112,15 @@ async fn main() {
                     } else {
                         status_code.to_string().bright_red()
                     };
-                    println!("{}", format!("{}: {}", url, format!("{}", code)));
+
+                    let display_message = format!("{url}: {code}");
+                    println!("{}", display_message);
 
                     (format!("{url}: "), format!("{status_code}"))
                 }
 
                 Err((k, e)) => {
-                    println!(
-                        "{}",
-                        format!("{}: {}", k, format!("{:#?}", e.to_string()).bright_red())
-                    );
+                    println!("{k}: {}", format!("{}", e.to_string().bright_red()));
 
                     (format!("ERROR: "), format!("{:#?}", e.to_string()))
                 }

@@ -112,7 +112,7 @@ impl Args {
     }
 
     // thanks to https://github.com/sindresorhus/is-absolute-url/blob/main/index.js
-    pub fn is_absolute_url(&self, url: &String) -> bool {
+    pub fn is_absolute_url(&self, url: &str) -> bool {
         let windows_regex = Regex::new(r"^[a-zA-Z]:\\").unwrap();
         let absolute_regex = Regex::new(r"^[a-zA-Z][a-zA-Z\d+\-.]*?:").unwrap();
 
@@ -124,7 +124,7 @@ impl Args {
     }
 
     // Checks if encountered URLs follow format like `/walker` and `../walker`
-    pub fn is_relative_url(&self, url: &String) -> bool {
+    pub fn is_relative_url(&self, url: &str) -> bool {
         !self.is_absolute_url(url)
     }
 
@@ -200,7 +200,6 @@ impl Args {
     #[async_recursion]
     /**
      * Get a list of all URLs found on the page at the provided URL.
-     *
      * @param url The URL to crawl.
      * @returns A list of URLs found on the page.
      */

@@ -1,39 +1,33 @@
+use colored::Colorize;
 use futures::StreamExt;
 use reqwest::{StatusCode, Url};
-use std::fs::{create_dir, write};
+use std::fs::{create_dir_all, write};
 
-pub fn is_valid_url(url: String) -> bool {
-    url.starts_with("http") || url.starts_with("https")
-}
-
-pub fn save(str: String, url: &String, key: &str, format: &str) -> std::io::Result<()> {
+pub fn save(str: String, url: &str, key: &str, format: &str) -> std::io::Result<()> {
     let working_dir = format!("./data/{url}");
     let save_path = format!("/{}-{key}.{format}", url);
 
-    match create_dir(format!("{working_dir}")) {
+    let final_destination = working_dir.clone() + &save_path;
+
+    match create_dir_all(format!("{working_dir}")) {
         Ok(_) => {
-            println!("Creating directory...");
-            let cl = working_dir.clone() + &save_path;
             let links_cl = str.clone();
 
-            match write(cl.clone(), links_cl) {
+            match write(final_destination.clone(), links_cl) {
                 Ok(_) => {
-                    println!("{}", format!("Saved {key} to {cl}"))
+                    println!(
+                        "{}",
+                        format!("Saved {key} to {final_destination}").underline()
+                    )
                 }
                 Err(e) => println!("Some error occurred: {}", e),
             }
         }
-        Err(_e) => {
-            println!("Directory already exists. Writing to file now.");
-            let cl = working_dir.clone() + &save_path;
-            let links_cl = str.clone();
-
-            match write(cl.clone(), links_cl) {
-                Ok(_) => {
-                    println!("{}", format!("Saved {key} to {cl}"))
-                }
-                Err(e) => println!("Some error occurred: {}", e),
-            }
+        Err(e) => {
+            eprintln!(
+                "Some error occurred while trying to save {key} at {final_destination}: {}",
+                e.to_string().bright_red()
+            );
         }
     }
 
@@ -55,25 +49,7 @@ pub async fn get_status_buffer_unordered(
     urls: Vec<String>,
     debug: Option<bool>,
 ) -> Vec<Result<(String, StatusCode), (String, String)>> {
-    let correct = urls
-        .clone()
-        .into_iter()
-        .filter(|x| {
-            let is_valid_url = is_valid_url(x.to_string());
-            let matchable = match Url::parse(x) {
-                Ok(_) => true,
-                Err(_) => false,
-            };
-
-            if !is_valid_url || !matchable {
-                return false;
-            }
-
-            true
-        })
-        .collect::<Vec<String>>();
-
-    let statuses = futures::stream::iter(correct.into_iter().map(|url| {
+    let statuses = futures::stream::iter(urls.into_iter().map(|url| {
         if debug.unwrap() {
             println!("Verifying {}", url);
         }
@@ -88,7 +64,7 @@ pub async fn get_status_buffer_unordered(
                     Ok((href, status))
                 }
                 // @TODO: Perform a GET request if HEAD fails.
-                Err(err) => Err((href, err.to_string())), 
+                Err(err) => Err((href, err.to_string())),
             }
         }
     }))

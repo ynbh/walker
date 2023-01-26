@@ -7,8 +7,7 @@ pub struct FinalStatus {
 }
 
 pub fn parse(status: String) -> String {
-    let owned = status.to_owned();
-    let lines = owned.split("\n");
+    let lines = status.split("\n");
     let mut v: Vec<FinalStatus> = vec![];
 
     for values in lines {
