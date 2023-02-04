@@ -1,0 +1,318 @@
+[
+  {
+    "url": "https://craftinginterpreters.com/representing-code.html",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://payhip.com/b/F0zkr",
+    "status": "200 OK"
+  },
+  {
+    "url": "http://finch.stuffwithstuff.com/",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://craftinginterpreters.com/a-map-of-the-territory.html",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://craftinginterpreters.com/acknowledgements.html",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://craftinginterpreters.com/global-variables.html",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://www.amazon.es/dp/0990582930",
+    "status": "405 Method Not Allowed"
+  },
+  {
+    "url": "https://www.amazon.es/dp/B09BCCVLCL",
+    "status": "405 Method Not Allowed"
+  },
+  {
+    "url": "https://craftinginterpreters.com/backmatter.html",
+    "status": "200 OK"
+  },
+  {
+    "url": "http://gameprogrammingpatterns.com/",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://craftinginterpreters.com/classes.html",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://craftinginterpreters.com/chunks-of-bytecode.html",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://craftinginterpreters.com/the-lox-language.html",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://craftinginterpreters.com/a-bytecode-virtual-machine.html",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://craftinginterpreters.com/superclasses.html",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://craftinginterpreters.com/functions.html",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://books.apple.com/us/book/crafting-interpreters/id1578795812",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://craftinginterpreters.com/compiling-expressions.html",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://www.smashwords.com/books/view/1096463",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://craftinginterpreters.com/control-flow.html",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://craftinginterpreters.com/scanning.html",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://craftinginterpreters.com/",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://www.amazon.com/dp/B09BCCVLCL",
+    "status": "405 Method Not Allowed"
+  },
+  {
+    "url": "https://www.amazon.com.au/dp/0990582930",
+    "status": "405 Method Not Allowed"
+  },
+  {
+    "url": "https://craftinginterpreters.com/types-of-values.html",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://www.amazon.fr/dp/B09BCCVLCL",
+    "status": "405 Method Not Allowed"
+  },
+  {
+    "url": "https://craftinginterpreters.com/hash-tables.html",
+    "status": "200 OK"
+  },
+  {
+    "url": "http://wren.io/",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://craftinginterpreters.com/introduction.html",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://craftinginterpreters.com/appendix-ii.html",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://craftinginterpreters.com/contents.html",
+    "status": "200 OK"
+  },
+  {
+    "url": "http://dart.dev/",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://craftinginterpreters.com/scanning-on-demand.html",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://craftinginterpreters.com/statements-and-state.html",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://www.amazon.co.jp/dp/0990582930",
+    "status": "405 Method Not Allowed"
+  },
+  {
+    "url": "https://craftinginterpreters.com/welcome.html",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://craftinginterpreters.com/index.html",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://craftinginterpreters.com/closures.html",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://www.barnesandnoble.com/w/crafting-interpreters-robert-nystrom/1139915245?ean=9780990582939",
+    "status": "503 Service Unavailable"
+  },
+  {
+    "url": "https://www.amazon.com/dp/0990582930",
+    "status": "405 Method Not Allowed"
+  },
+  {
+    "url": "https://www.amazon.co.uk/dp/0990582930",
+    "status": "405 Method Not Allowed"
+  },
+  {
+    "url": "https://www.amazon.com.br/dp/B09BCCVLCL",
+    "status": "405 Method Not Allowed"
+  },
+  {
+    "url": "https://www.amazon.co.uk/dp/B09BCCVLCL",
+    "status": "405 Method Not Allowed"
+  },
+  {
+    "url": "https://www.amazon.in/dp/B09BCCVLCL",
+    "status": "405 Method Not Allowed"
+  },
+  {
+    "url": "https://craftinginterpreters.com/garbage-collection.html",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://www.amazon.it/dp/0990582930",
+    "status": "405 Method Not Allowed"
+  },
+  {
+    "url": "https://www.amazon.com.au/dp/B09BCCVLCL",
+    "status": "405 Method Not Allowed"
+  },
+  {
+    "url": "https://craftinginterpreters.com/strings.html",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://craftinginterpreters.com/a-virtual-machine.html",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://play.google.com/store/books/details?id=q0c6EAAAQBAJ",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://www.barnesandnoble.com/w/crafting-interpreters-robert-nystrom/1139915245?ean=2940164977092",
+    "status": "503 Service Unavailable"
+  },
+  {
+    "url": "https://www.amazon.ca/dp/B09BCCVLCL",
+    "status": "405 Method Not Allowed"
+  },
+  {
+    "url": "https://www.amazon.com.mx/dp/B09BCCVLCL",
+    "status": "405 Method Not Allowed"
+  },
+  {
+    "url": "https://craftinginterpreters.com/jumping-back-and-forth.html",
+    "status": "200 OK"
+  },
+  {
+    "url": "http://magpie-lang.org/",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://www.amazon.de/dp/0990582930",
+    "status": "405 Method Not Allowed"
+  },
+  {
+    "url": "https://craftinginterpreters.com/sample.pdf",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://craftinginterpreters.com/local-variables.html",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://craftinginterpreters.com/dedication.html",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://craftinginterpreters.com/parsing-expressions.html",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://github.com/munificent/vigil",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://craftinginterpreters.com/resolving-and-binding.html",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://craftinginterpreters.com/appendix-i.html",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://craftinginterpreters.com/a-tree-walk-interpreter.html",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://craftinginterpreters.com/classes-and-instances.html",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://craftinginterpreters.com/methods-and-initializers.html",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://craftinginterpreters.com/calls-and-functions.html",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://www.amazon.ca/dp/0990582930",
+    "status": "405 Method Not Allowed"
+  },
+  {
+    "url": "https://www.amazon.de/dp/B09BCCVLCL",
+    "status": "405 Method Not Allowed"
+  },
+  {
+    "url": "https://www.amazon.it/dp/B09BCCVLCL",
+    "status": "405 Method Not Allowed"
+  },
+  {
+    "url": "https://craftinginterpreters.com/optimization.html",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://www.amazon.fr/dp/0990582930",
+    "status": "405 Method Not Allowed"
+  },
+  {
+    "url": "https://twitter.com/intent/user?screen_name=munificentbob",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://craftinginterpreters.com/evaluating-expressions.html",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://www.bookdepository.com/Crafting-Interpreters-Robert-Nystrom/9780990582939",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://craftinginterpreters.com/inheritance.html",
+    "status": "200 OK"
+  },
+  {
+    "url": "http://journal.stuffwithstuff.com/",
+    "status": "200 OK"
+  },
+  {
+    "url": "https://www.amazon.co.jp/dp/B09BCCVLCL",
+    "status": "405 Method Not Allowed"
+  },
+  {
+    "url": "https://github.com/munificent/craftinginterpreters/blob/master/LICENSE",
+    "status": "200 OK"
+  }
+]

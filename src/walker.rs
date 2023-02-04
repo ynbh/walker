@@ -111,7 +111,7 @@ impl Args {
         Selector::parse(tag).unwrap()
     }
 
-    // thanks to https://github.com/sindresorhus/is-absolute-url/blob/main/index.js
+    // @credit https://github.com/sindresorhus/is-absolute-url/blob/main/index.js
     pub fn is_absolute_url(&self, url: &str) -> bool {
         let windows_regex = Regex::new(r"^[a-zA-Z]:\\").unwrap();
         let absolute_regex = Regex::new(r"^[a-zA-Z][a-zA-Z\d+\-.]*?:").unwrap();
