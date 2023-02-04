@@ -77,8 +77,11 @@ impl Args {
 
         self.insert(url.clone());
 
-        if debug.unwrap_or(false) {
-            println!("{}", format!("[DEBUG] Fetching {url}").bright_purple())
+        if debug == Some(true) {
+            println!(
+                "{}",
+                format!("{} Fetching {url}", "[DEBUG]".bright_magenta()).bright_yellow()
+            )
         }
 
         return match self

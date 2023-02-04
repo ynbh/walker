@@ -193,8 +193,8 @@ async fn check_status(
 
     let futures = correct.iter().map(|url| {
         let req = client.clone().head(url);
-        if debug.unwrap() {
-            println!("Verifying {}", url.bright_yellow());
+        if debug == Some(true) {
+            println!("{} {}", "[Verifying]".bright_magenta(), url.bright_yellow());
         }
         async {
             let cl = url.clone();
