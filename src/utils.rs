@@ -4,7 +4,7 @@ use reqwest::{StatusCode, Url};
 use std::fs::{create_dir_all, write};
 
 pub fn save(str: String, url: &str, key: &str, format: &str) -> std::io::Result<()> {
-    let working_dir = format!("./data/{url}");
+    let working_dir = format!("./link-walker/data/urls/{url}");
     let save_path = format!("/{}-{key}.{format}", url);
 
     let final_destination = working_dir.clone() + &save_path;
