@@ -3,6 +3,7 @@ use regex::Regex;
 use reqwest::Url;
 use reqwest::{header::USER_AGENT, Client};
 use scraper::{Html, Selector};
+use rayon::prelude::*;
 
 use std::collections::hash_set::HashSet;
 use std::process;
@@ -191,7 +192,7 @@ impl Args {
             hrefs.push(value_at_attr)
         }
 
-        hrefs.into_iter().filter(|k| k != "").collect()
+        hrefs.into_par_iter().filter(|k| k != "").collect()
     }
 
     // Get all anchor tags from the parsed HTML

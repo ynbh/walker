@@ -7,10 +7,11 @@ use clap::Parser;
 use colored::*;
 use futures::future::join_all;
 use reqwest::{StatusCode, Url};
+use rayon::prelude::*;
 
 use parse::parse;
 use stats::Stats;
-use utils::{get_domain_name, save};
+use utils::{get_domain_name, save, get_status_buffer_unordered};
 use walker::Args;
 
 mod parse;
@@ -25,7 +26,7 @@ struct CLIArgs {
     /// URL of the website to analyze links from.
     #[arg(short, long)]
     url: String,
-
+    
     /// Whether to perform a deep search or not.
     #[arg(short, long, default_value_t = false)]
     relative: bool,
@@ -72,7 +73,7 @@ async fn main() {
 
     let sing = reqwest::Client::builder()
         .danger_accept_invalid_certs(true)
-        .timeout(Duration::from_secs(5))
+        .timeout(Duration::from_secs(8))
         .build()
         .unwrap();
     let file_path = args.remove_trailing_slashes(get_domain_name(args.url.to_string()));
@@ -85,12 +86,12 @@ async fn main() {
     )
     .unwrap();
 
-    let status_vec = check_status(
+    let status_vec = get_status_buffer_unordered(
         sing,
         links
             .urls
             .clone()
-            .into_iter()
+            .into_par_iter()
             .filter(|x| !x.starts_with("mailto") || !x.starts_with("file:"))
             .collect(),
         Some(cli_args.debug),
@@ -174,13 +175,15 @@ async fn main() {
     }
 }
 
+
+#[allow(dead_code)]
 async fn check_status(
     client: reqwest::Client,
     urls: Vec<String>,
     debug: Option<bool>,
 ) -> Vec<Result<(String, StatusCode), (String, String)>> {
     let correct = urls
-        .into_iter()
+        .into_par_iter()
         .map(|url| {
             let mut parsed_url = Url::parse(&url).unwrap();
 

@@ -50,8 +50,8 @@ pub async fn get_status_buffer_unordered(
     debug: Option<bool>,
 ) -> Vec<Result<(String, StatusCode), (String, String)>> {
     let statuses = futures::stream::iter(urls.into_iter().map(|url| {
-        if debug.unwrap() {
-            println!("Verifying {}", url);
+        if debug == Some(true) {
+            println!("{} {}", "[Verifying]".bright_magenta(), url.bright_yellow());
         }
         let href = url.clone();
 
@@ -68,7 +68,7 @@ pub async fn get_status_buffer_unordered(
             }
         }
     }))
-    .buffer_unordered(50)
+    .buffer_unordered(500)
     .collect::<Vec<_>>();
 
     statuses.await
