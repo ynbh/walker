@@ -6,12 +6,12 @@ use arboard::Clipboard;
 use clap::Parser;
 use colored::*;
 use futures::future::join_all;
-use reqwest::{StatusCode, Url};
 use rayon::prelude::*;
+use reqwest::{StatusCode, Url};
 
 use parse::parse;
 use stats::Stats;
-use utils::{get_domain_name, save, get_status_buffer_unordered};
+use utils::{get_domain_name, get_status_buffer_unordered, save};
 use walker::Args;
 
 mod parse;
@@ -26,10 +26,14 @@ struct CLIArgs {
     /// URL of the website to analyze links from.
     #[arg(short, long)]
     url: String,
-    
+
     /// Whether to perform a deep search or not.
     #[arg(short, long, default_value_t = false)]
     relative: bool,
+
+    /// Number of threads to operate on
+    #[arg(short, long, default_value_t = 500)]
+    threads: usize,
 
     /// Shows what URL walker is currently on.
     #[arg(short, long, default_value_t = false)]
@@ -95,6 +99,7 @@ async fn main() {
             .filter(|x| !x.starts_with("mailto") || !x.starts_with("file:"))
             .collect(),
         Some(cli_args.debug),
+        Some(cli_args.threads),
     )
     .await;
 
@@ -174,7 +179,6 @@ async fn main() {
         }
     }
 }
-
 
 #[allow(dead_code)]
 async fn check_status(

@@ -1,4 +1,4 @@
 ## Stats 
-Time to get 2178 links: **243** seconds
+Time to get 2193 links: **83** seconds
 
-Time to verify 2178 links: **0** seconds
+Time to verify 2193 links: **0** seconds

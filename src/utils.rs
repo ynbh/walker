@@ -48,6 +48,7 @@ pub async fn get_status_buffer_unordered(
     client: reqwest::Client,
     urls: Vec<String>,
     debug: Option<bool>,
+    threads: Option<usize>,
 ) -> Vec<Result<(String, StatusCode), (String, String)>> {
     let statuses = futures::stream::iter(urls.into_iter().map(|url| {
         if debug == Some(true) {
@@ -68,7 +69,7 @@ pub async fn get_status_buffer_unordered(
             }
         }
     }))
-    .buffer_unordered(500)
+    .buffer_unordered(threads.unwrap_or(500))
     .collect::<Vec<_>>();
 
     statuses.await
