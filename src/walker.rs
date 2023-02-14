@@ -104,7 +104,11 @@ impl Args {
     }
 
     pub async fn parse_html(&mut self, nested_url: String) -> Html {
-        let html = self.get_html(nested_url).await.unwrap();
+        let html = match self.get_html(nested_url).await {
+            Ok(n) => n,
+            Err(_) => "".into(),
+        };
+
         let document = Html::parse_document(html.as_str());
 
         return document;
@@ -163,24 +167,16 @@ impl Args {
         resultant
     }
 
-    // Get all anchor tags from the parsed HTML
-    pub async fn filter_anchors(&mut self, url: String) -> Vec<String> {
-        let url = self.remove_fragment(url);
+    pub async fn filter_hrefs(&mut self, url: &str, tag: &str, attribute: &str) -> Vec<String> {
+        let document = self.parse_html(url.to_string()).await;
+        let selector = self.get_tag_by_name(tag);
+        let tags = document.select(&selector);
 
-        let mut v = vec![];
+        let mut hrefs = Vec::new();
 
-        if self.set.contains(&url) {
-            return v;
-        }
-        let document = self.parse_html(url).await;
-
-        let a_tags_selector = self.get_tag_by_name("a");
-
-        let a_tags = document.select(&a_tags_selector);
-
-        for tags in a_tags {
-            let value = tags.value();
-            let href = match value.attr("href") {
+        for tag in tags {
+            let value = tag.value();
+            let value_at_attr = match value.attr(attribute) {
                 Some(n) => {
                     let effective_href = match n {
                         "" => &self.url,
@@ -189,12 +185,41 @@ impl Args {
                     .to_string();
                     effective_href
                 }
-                None => break,
+                None => String::from(""),
             };
-            if !href.starts_with("#") {
-                v.push(href)
+
+            hrefs.push(value_at_attr)
+        }
+
+        hrefs.into_iter().filter(|k| k != "").collect()
+    }
+
+    // Get all anchor tags from the parsed HTML
+    pub async fn get_all_links(&mut self, url: String) -> Vec<String> {
+        let url = self.remove_fragment(url);
+
+        let mut v = vec![];
+
+        if self.set.contains(&url) {
+            return v;
+        }
+
+        let anchor_tags = self.filter_hrefs(&url, "a", "href").await;
+       
+        // This does not filter out image tags. Will need to investigate _why_.
+        // let img_tags = self.filter_hrefs(&url, "img", "src").await;
+
+        for a in anchor_tags {
+            if !a.starts_with("#") {
+                v.push(a);
             }
         }
+
+
+        // for img in img_tags {
+        //     v.push(img)
+        // }
+
         v
     }
 
@@ -225,7 +250,7 @@ impl Args {
         }
 
         let anchors = self
-            .filter_anchors(self.remove_trailing_slashes(effective_url.clone()))
+            .get_all_links(self.remove_trailing_slashes(effective_url.clone()))
             .await;
 
         for href in anchors {

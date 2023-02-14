@@ -234,41 +234,45 @@
         <div class="outline">
    
         <h1>Walker</h1>
-<p>Walker is a tool that performs a recursive analysis of a website, including all subdirectories and pages, to search for faulty links. It operates under the premise that the homepage of the site in question leads to other pages within the website, which subsequently lead to yet more pages.</p>
+<p>Walker is a tool that performs a recursive analysis of a website to search for faulty links. It operates under the premise that the homepage of the site in question leads to other pages within the website, which subsequently lead to yet more pages.</p>
 <p>It is worth noting that this process may take an indeterminate amount of time, as a website may contain an infinite number of nested links. A potential future update to the recursive function could be the addition of a <code>depth</code> parameter, which would restrict recursion to only a specified number of levels. I don't plan on implementing this any time soon due to CBSE board exams and college applications, though!</p>
-<p>Also, <code>walker</code> is fast as fuck. After it acquires all the URLs in a website, it quickly(say, 0 seconds) performs status check for all of them concurrently. For example, it verified all the links(2026) on <a href="https://nextjs.org">Next</a>'s website in 61 seconds:</p>
-<pre><code class="language-txt">Stats
-Time to get all links: 61 seconds
-Time to verify links: 0 seconds
-</code></pre>
+<p>Also, <code>walker</code> is fast as fuck. After it acquires all the URLs in a website, it concurrently sends them requests to quickly verify if they're broken or not. There is a <a href="#rate-limits">rate-limiting issue</a> that I am quite not sure how to fix, but I think I'll eventually figure it out.</p>
 <h2>Quirks</h2>
 <h3>Client side rendering</h3>
-<p>Since the implementation of this tool works through fetching the HTML of the website in question, it would be impossible for it to retrieve HTML for pages that render on the client. Basically, only the HTML available when you view the page source is analyzed.</p>
-<p>I could perhaps use something like headless chrome to get the HTML for these pages, but that only adds overhead to problem I was initially trying to solve.</p>
+<p>Since the implementation of this tool works through fetching the HTML of the website in question, it would be impossible for it to retrieve HTML for pages that render on the client. Basically, only the HTML available when you view the page source is analyzed. This often includes websites that are either statically generated or rendered on the server.</p>
 <h3>Rate limits</h3>
 <p>Since I don't wait between each request, some websites might enforce their rate-limiting policies on <code>walker</code>, and hence cause it to error out for URLs which are working perfectly fine. In these cases, if the API is returning semantic error codes, <code>walker</code> will display something like <code>429 Too Many Requests</code>.</p>
 <p><code>walker</code> has a timeout of 5 seconds between each request. If the URL does not return a response within 5 seconds, it will error out and show that the operation was timed out.</p>
 <h3>Head requests</h3>
-<p>To save on bytes, <code>walker</code> performs <code>HEAD</code> requests instead of <code>GET</code> requests. However, some websites might deny responding to this method, which can error out <code>walker</code> for them.</p>
+<p>To save on bytes, <code>walker</code> performs <code>HEAD</code> requests instead of <code>GET</code> requests. However, some websites might deny responding to this method, which could lead to false positives. In these cases, <code>walker</code> will show an error like <code>405 Method Not Allowed</code>.</p>
 <h2>Examples</h2>
-<p>Examples of what the data would look like after the process is over can be found in the <a href="/data/">data</a> directory.</p>
+<p>Examples of what the data would look like after the process is over can be found in the <a href="/link-walker/data/urls">link-walker</a> directory.</p>
 <h2>Install</h2>
-<p>To install <code>walker</code>, you will need to have <code>cargo</code> configured in your environment. You can see how to do so <a href="https://doc.rust-lang.org/cargo/getting-started/installation.html">here</a>. Once you're done doing so, simply run <code>cargo install link-walker</code>, and let it install.</p>
+<p>To install <code>walker</code>, you will need to have <code>cargo</code> configured in your environment. You can see how to do so <a href="https://doc.rust-lang.org/cargo/getting-started/installation.html">here</a>. When you're done doing so, run:</p>
+<pre><code class="language-zsh">cargo install link-walker
+</code></pre>
+<p>...and let it install. Once <code>link-walker</code> is done installing, you can simply run:</p>
+<pre><code class="language-zsh">link-walker -h
+</code></pre>
+<p>...to get information on how to use the tool.</p>
 <h2>Usage</h2>
 <p>Using <code>walker</code> is easy. It has a dead-simple CLI interface that can be used to visually see the results of the analysis. Options for it are:</p>
-<pre><code class="language-bash">Options:
+<pre><code class="language-bash">Usage: link-walker [OPTIONS] --url &#x3C;URL>
+
+Options:
   -u, --url &#x3C;URL>  URL of the website to analyze links from
   -r, --relative   Whether to perform a deep search or not
   -d, --debug      Shows what URL walker is currently on
   -c, --construct  Constructs the stream of responses into a string and copies it to the clipboard
-  -h, --help       Print help information
-  -V, --version    Print version information
+  -s, --singular   Checks if the domain of the URL is resolvable
+  -h, --help       Print help
+  -V, --version    Print version
 </code></pre>
 <p>So, for example, doing:</p>
 <pre><code class="language-bash">link-walker --url "https://ynb.sh"
 </code></pre>
 <p>...would result in:</p>
-<pre><code class="language-bash">Received 4 links. Iterating now...
+<pre><code class="language-bash">Received 3 links. Iterating now...
 https://ynb.sh/posts: 200 OK
 https://github.com/ynbh: 200 OK
 https://ynb.sh: 200 OK
@@ -299,7 +303,7 @@ Time to get all links: 1 seconds
 Time to verify links: 0 seconds
 </code></pre>
 <p>To debug what URL <code>walker</code> is currently fetching, simply pass it a <code>-d</code> debug flag.</p>
-<p>In situations where <code>walker</code> is unable to resolve some arbitrary URL, it will properly show the error while verifying all the links. Often, this error occurs because <code>reqwest</code> is unable to resolve its DNS. You can check if that is the case by running <code>link-walker --url &#x3C;URL> -s</code>. If it does not return an error, there is probably something else going on with the URL that needs to be looked at.</p>
+<p>In situations where <code>walker</code> is unable to resolve some arbitrary URL, it will accurately display the exact error that occurred. Often, this error occurs because <code>reqwest</code> is unable to resolve its DNS. You can check if that is the case by running <code>link-walker --url &#x3C;URL> -s</code>. If it does not return an error, there is probably something else going on with the URL that needs to be looked at.</p>
 <h2>Extra</h2>
 <p>Note that this is an experimental tool, and I only made this to learn more about Rust. I wrote a <a href="https://ynb.sh/posts/walker">blog post detailing how I made it!</a></p>
         </div>
