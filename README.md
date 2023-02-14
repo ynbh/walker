@@ -20,7 +20,7 @@ Since I don't wait between each request, some websites might enforce their rate-
 
 ### Head requests
 
-To save on bytes, `walker` performs `HEAD` requests instead of `GET` requests. However, some websites might deny responding to this method, which could lead to false positives. In these cases, `walker` will show an error like `405 Method Not Allowed`.
+To save on bytes, `walker` performs `HEAD` requests instead of `GET` requests. However, some websites might deny responding to this method, which could lead to false negatives. In these cases, `walker` will show an error like `405 Method Not Allowed`.
 
 ## Examples
 
