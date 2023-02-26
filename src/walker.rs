@@ -273,18 +273,7 @@ impl Args {
         urls
     }
 
-    // Unused Functions
-
-    pub async fn _is_broken(&mut self, url: String) -> String {
-        let status = match self.get(url, None).await {
-            Ok(n) => n.status().to_string(),
-            Err(_) => "URL Error".to_string(),
-        };
-
-        status
-    }
-
-    pub fn _base_url(&self, mut url: Url) -> Result<Url, &str> {
+    pub fn base_url(&self, mut url: Url) -> Result<Url, &str> {
         match url.path_segments_mut() {
             Ok(mut path) => {
                 path.clear();
