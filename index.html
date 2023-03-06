@@ -245,8 +245,6 @@
 <p><code>walker</code> has a timeout of 5 seconds between each request. If the URL does not return a response within 5 seconds, it will error out and show that the operation was timed out.</p>
 <h3>Head requests</h3>
 <p>To save on bytes, <code>walker</code> performs <code>HEAD</code> requests instead of <code>GET</code> requests. However, some websites might deny responding to this method, which could lead to false negatives. In these cases, <code>walker</code> will show an error like <code>405 Method Not Allowed</code>.</p>
-<h2>Examples</h2>
-<p>Examples of what the data would look like after the process is over can be found in the <a href="/link-walker/data/urls">link-walker</a> directory.</p>
 <h2>Install</h2>
 <p>To install <code>walker</code>, you will need to have <code>cargo</code> configured in your environment. You can see how to do so <a href="https://doc.rust-lang.org/cargo/getting-started/installation.html">here</a>. When you're done doing so, run:</p>
 <pre><code class="language-zsh">cargo install link-walker

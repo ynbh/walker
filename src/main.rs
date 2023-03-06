@@ -132,9 +132,9 @@ async fn main() {
                 }
             };
 
-            if cli_args.construct {
+            
                 response.push_str(format!("{k}{v}\n",).as_str());
-            }
+            
         }
 
         let loop_elapsed = now.elapsed().as_secs().to_string();
