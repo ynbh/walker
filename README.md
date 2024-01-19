@@ -4,7 +4,10 @@ Walker is a tool that performs a recursive analysis of a website to search for f
 
 It is worth noting that this process may take an indeterminate amount of time, as a website may contain an infinite number of nested links. A potential future update to the recursive function could be the addition of a `depth` parameter, which would restrict recursion to only a specified number of levels. I don't plan on implementing this any time soon due to CBSE board exams and college applications, though!
 
-Also, `walker` is fast as fuck. After it acquires all the URLs in a website, it sends them parallel requests to quickly verify if they're broken or not. There is a [rate-limiting issue](#rate-limits) that I am quite not sure how to fix, but I think I'll eventually figure it out. Foe what it's worth, the only cost-heavy part of `walker` is acquiring the URLs. That process is neither concurrent, nor parallel, and hence takes a while.
+Also, `walker` is fast af. After it acquires all the URLs in a website, it sends them parallel requests to quickly verify if they're broken or not. There is a [rate-limiting issue](#rate-limits) that I am quite not sure how to fix, but I think I'll eventually figure it out. Foe what it's worth, the only cost-heavy part of `walker` is acquiring the URLs. That process is neither concurrent, nor parallel, and hence takes a while.
+
+A diagrammatic representation of the process:
+![Walker Rep](./Walker-2.jpg)
 
 ## Quirks
 
