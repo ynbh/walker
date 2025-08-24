@@ -106,4 +106,4 @@ link-walker --url <URL> -s
 
 ## Why this project
 
-I built Walker to deepen my skills in Rust, networking, and concurrent I/O, while producing a practical CLI for link health checks. A write‑up of the approach and lessons learned is available in this [blog post](https://ynb.sh/posts/walker).
+I built Walker to deepen my skills in Rust, networking, and concurrent I/O, while producing a practical CLI for link health checks.
