@@ -1,3 +1,5 @@
+
+
 # Walker
 
 Walker is a high‑performance link analysis CLI written in Rust. It recursively crawls a site to discover links and then validates them in parallel to surface broken or misconfigured URLs across a domain.
@@ -41,6 +43,7 @@ Usage: link-walker [OPTIONS] --url <URL>
 Options:
   -u, --url <URL>   URL of the website to analyze
   -r, --relative    Perform a recursive deep search (follow internal links)
+  -t, --threads <THREADS>   Number of threads to operate on (default: 500)
   -d, --debug       Show the current URL being fetched
   -c, --construct   Construct the response stream into a string and copy to clipboard
   -s, --singular    Check if the domain of the URL is resolvable
